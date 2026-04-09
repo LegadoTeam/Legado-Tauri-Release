@@ -42,8 +42,10 @@ jobs:
         with:
           repository: LegadoTeam/Legado-Tauri
           token: ${{ secrets.TOKEN_MGZ }}
-          fetch-depth: 0
-
+          ref: main
+          submodules: recursive
+          fetch-depth: 0 
+          persist-credentials: true
       # ---------------- Node + pnpm（关键修复） ----------------
       - uses: actions/checkout@main
       
@@ -129,8 +131,10 @@ jobs:
         with:
           repository: LegadoTeam/Legado-Tauri
           token: ${{ secrets.TOKEN_MGZ }}
-          fetch-depth: 0
-
+          ref: main
+          submodules: recursive
+          fetch-depth: 0 
+          persist-credentials: true
       # ---------------- Node + pnpm ----------------
       - uses: actions/checkout@main
       
