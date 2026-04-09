@@ -43,19 +43,19 @@ jobs:
           token: ${{ secrets.TOKEN_MGZ }}
           fetch-depth: 0
 
-      # ---------------- Node ----------------
       - name: Setup Node
         uses: actions/setup-node@main
         with:
           node-version: 24
-          cache: pnpm
-
-      # ---------------- Install pnpm (关键修复) ----------------
-      - name: Install pnpm globally
-        run: npm install -g pnpm
-
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Activate pnpm
+        run: corepack prepare pnpm@9.12.0 --activate
+      
       - name: Verify pnpm
-        run: pnpm -v
+        run: which pnpm && pnpm -v
 
       # ---------------- Install deps ----------------
       - name: Install dependencies
