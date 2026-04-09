@@ -130,13 +130,15 @@ jobs:
         uses: actions/setup-node@main
         with:
           node-version: 24
-          cache: pnpm
-
-      - name: Install pnpm globally
-        run: npm install -g pnpm
-
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Activate pnpm
+        run: corepack prepare pnpm@9.12.0 --activate
+      
       - name: Verify pnpm
-        run: pnpm -v
+        run: which pnpm && pnpm -v
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
