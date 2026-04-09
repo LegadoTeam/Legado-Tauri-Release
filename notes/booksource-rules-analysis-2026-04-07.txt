@@ -1,0 +1,821 @@
+
+════════════════════════════════════════════════════════════════════════
+  书源规则统计分析报告  |  共 2058 条书源  |  跳过 0 个文件
+════════════════════════════════════════════════════════════════════════
+  分析时间: 2026/4/7 20:28:45
+  书源目录: tmp-booksources/  共 2058 个文件
+
+────────────────────────────────────────────────────────────────────────
+  0. 书源类型分布
+────────────────────────────────────────────────────────────────────────
+  类型 0 (文字小说): 1903 (92.5%)
+  类型 2 (漫画): 80 (3.9%)
+  类型 1 (未知类型): 41 (2.0%)
+  类型 3 (音频): 34 (1.7%)
+
+════════════════════════════════════════════════════════════════════════
+  1. 正文内容规则  ruleContent.content
+════════════════════════════════════════════════════════════════════════
+
+  ┌─ TOP 40 完整规则（精确命中率）
+    1.   174 (  8.5%)  id.content@html
+    2.    67 (  3.3%)  id.content@textNodes
+    3.    54 (  2.6%)  #content@html
+    4.    51 (  2.5%)  #nr1@html
+    5.    39 (  1.9%)  #content@textNodes
+    6.    39 (  1.9%)  $..content
+    7.    27 (  1.3%)  #nr@html
+    8.    25 (  1.2%)  .content@html
+    9.    22 (  1.1%)  id.htmlContent@html
+   10.    21 (  1.0%)  id.nr1@html
+   11.    20 (  1.0%)  $.chapter.htmlContent
+   12.    18 (  0.9%)  class.content@html
+   13.    17 (  0.8%)  #chaptercontent@html
+   14.    16 (  0.8%)  $.content
+   15.    15 (  0.7%)  .font_max@html
+   16.    14 (  0.7%)  #nr1@textNodes
+   17.    14 (  0.7%)  id.chaptercontent@html
+   18.    14 (  0.7%)  id.ChapterContents@html
+   19.    14 (  0.7%)  $.info.sound.soundurl_128||$.info.sound.soundurl
+   20.    13 (  0.6%)  id.chaptercontent@textNodes
+   21.    12 (  0.6%)  class.font_max@html
+   22.    12 (  0.6%)  $.data.content
+   23.    12 (  0.6%)  class.con@html
+   24.    11 (  0.5%)  ChapterContent
+   25.    11 (  0.5%)  #chaptercontent@textNodes
+   26.    11 (  0.5%)  #htmlContent@html
+   27.    10 (  0.5%)  id.nr1@textNodes
+   28.    10 (  0.5%)  class.readcontent@html
+   29.    10 (  0.5%)  id.content@p@html
+   30.    10 (  0.5%)  class.b module@tag.li.0@textNodes&&class.b module@tag.li.1@textNodes
+   31.     9 (  0.4%)  #booktxt@html
+   32.     9 (  0.4%)  .readcontent@textNodes
+   33.     9 (  0.4%)  div#content@html
+   34.     9 (  0.4%)  <p>{{$.data.Content[0].Content}}</p>
+   35.     9 (  0.4%)  id.nr@html
+   36.     9 (  0.4%)  id.content1@html
+   37.     9 (  0.4%)  class.novel@tag.p@text
+   38.     9 (  0.4%)  .chapter_content@html
+   39.     8 (  0.4%)  id.TextContent@html
+   40.     8 (  0.4%)  #cont-body@html
+
+  ┌─ TOP 30 选择器 Token（包含频率，用于通用探测优先级排序）
+    1.   442 ( 21.5%)  .content
+    2.   262 ( 12.7%)  id.content
+    3.   123 (  6.0%)  #content
+    4.    74 (  3.6%)  #nr1
+    5.    63 (  3.1%)  $.content
+    6.    58 (  2.8%)  .data
+    7.    57 (  2.8%)  .split
+    8.    57 (  2.8%)  .join
+    9.    56 (  2.7%)  $.data
+   10.    55 (  2.7%)  .replace
+   11.    51 (  2.5%)  .p
+   12.    48 (  2.3%)  .map
+   13.    46 (  2.2%)  .htmlContent
+   14.    44 (  2.1%)  .match
+   15.    40 (  1.9%)  #chaptercontent
+   16.    40 (  1.9%)  .chaptercontent
+   17.    38 (  1.8%)  id.nr1
+   18.    38 (  1.8%)  .nr1
+   19.    36 (  1.7%)  id.chaptercontent
+   20.    34 (  1.7%)  .chapter
+   21.    34 (  1.7%)  .ajax
+   22.    33 (  1.6%)  class.content
+   23.    32 (  1.6%)  #nr
+   24.    29 (  1.4%)  .readcontent
+   25.    27 (  1.3%)  .font_max
+   26.    27 (  1.3%)  .stringify
+   27.    27 (  1.3%)  #novelcontent
+   28.    26 (  1.3%)  .parse
+   29.    26 (  1.3%)  id.htmlContent
+   30.    24 (  1.2%)  .url
+
+────────────────────────────────────────────────────────────────────────
+  1a. 正文容器 ID 专项（按书源计权重后排名）
+────────────────────────────────────────────────────────────────────────
+
+  ┌─ 正文容器 id= 排名 TOP 25
+    1.   393 ( 19.1%)  id="content"
+    2.   114 (  5.5%)  id="nr1"
+    3.    76 (  3.7%)  id="chaptercontent"
+    4.    48 (  2.3%)  id="nr"
+    5.    45 (  2.2%)  id="htmlContent"
+    6.    39 (  1.9%)  id="novelcontent"
+    7.    23 (  1.1%)  id="booktxt"
+    8.    22 (  1.1%)  id="cont-body"
+    9.    20 (  1.0%)  id="TextContent"
+   10.    19 (  0.9%)  id="ChapterContents"
+   11.    19 (  0.9%)  id="content1"
+   12.    15 (  0.7%)  id="rtext"
+   13.    15 (  0.7%)  id="BookText"
+   14.    15 (  0.7%)  id="txt"
+   15.    14 (  0.7%)  id="acontent"
+   16.    12 (  0.6%)  id="text"
+   17.    11 (  0.5%)  id="contentsource"
+   18.    10 (  0.5%)  id="YiJianZhan"
+   19.    10 (  0.5%)  id="txtContent"
+   20.     9 (  0.4%)  id="article"
+   21.     8 (  0.4%)  id="J_BookRead"
+   22.     7 (  0.3%)  id="articlecon"
+   23.     6 (  0.3%)  id="book_text"
+   24.     5 (  0.2%)  id="mycontent"
+   25.     5 (  0.2%)  id="booktext"
+
+  ┌─ 正文容器 class= 排名 TOP 25
+    1.   478 ( 23.2%)  class="content"
+    2.    60 (  2.9%)  class="data"
+    3.    46 (  2.2%)  class="htmlContent"
+    4.    43 (  2.1%)  class="readcontent"
+    5.    42 (  2.0%)  class="chapter"
+    6.    41 (  2.0%)  class="chaptercontent"
+    7.    41 (  2.0%)  class="p"
+    8.    40 (  1.9%)  class="b"
+    9.    39 (  1.9%)  class="font_max"
+   10.    38 (  1.8%)  class="nr1"
+   11.    32 (  1.6%)  class="read-content"
+   12.    31 (  1.5%)  class="Content"
+   13.    31 (  1.5%)  class="article-content"
+   14.    31 (  1.5%)  class="info"
+   15.    30 (  1.5%)  class="con"
+   16.    29 (  1.4%)  class="sound"
+   17.    26 (  1.3%)  class="page-content"
+   18.    25 (  1.2%)  class="acontent"
+   19.    24 (  1.2%)  class="novelcontent"
+   20.    23 (  1.1%)  class="novel"
+   21.    20 (  1.0%)  class="li"
+   22.    16 (  0.8%)  class="nr"
+   23.    16 (  0.8%)  class="ChapterContents"
+   24.    15 (  0.7%)  class="body"
+   25.    15 (  0.7%)  class="url"
+
+════════════════════════════════════════════════════════════════════════
+  2. 正文下一页规则  ruleContent.nextContentUrl
+════════════════════════════════════════════════════════════════════════
+
+  ┌─ TOP 30 完整规则
+    1.   323 ( 15.7%)  text.下一页@href
+    2.    54 (  2.6%)  text.下一@href
+    3.    45 (  2.2%)  text.下一章@href
+    4.    11 (  0.5%)  id.pb_next@href
+    5.     9 (  0.4%)  id.next_url@href
+    6.     9 (  0.4%)  #linkNext@href
+    7.     8 (  0.4%)  #next_url@href
+    8.     6 (  0.3%)  .page a@href
+    9.     6 (  0.3%)  class.pagebar@a.-1@href
+   10.     5 (  0.2%)  text.下 页@href||text.下一页@href
+   11.     4 (  0.2%)  text.下一页@href
+//需要加载下一页,章节地址添加
+   12.     4 (  0.2%)  #pb_next@href
+   13.     3 (  0.1%)  id.linkNext@href
+   14.     3 (  0.1%)  :contains(下一页)@href
+   15.     3 (  0.1%)  .text-center@a.2@href
+   16.     3 (  0.1%)  id.link@tag.a.3@href
+   17.     3 (  0.1%)  id.next@href
+   18.     3 (  0.1%)  class.novelbutton@tag.li.3@tag.a@href%%0
+   19.     3 (  0.1%)  //*[@id="pt_next"]/@href
+   20.     3 (  0.1%)  text.【.*?】@href
+   21.     3 (  0.1%)  class.col-md-6 text-center@a.-1@href
+   22.     3 (  0.1%)  class.typology-link-pages@a@href
+   23.     3 (  0.1%)  //a[@id="pt_next" and text()="下一页"]/@href
+   24.     3 (  0.1%)  text.下一页.1@href
+   25.     2 (  0.1%)  #pt_next@href
+   26.     2 (  0.1%)  id.pt_next@text.下一页@href
+   27.     2 (  0.1%)  //a[text()="下一页"]/@href
+   28.     2 (  0.1%)  class.book_content_text_next@tag.a.4@href
+   29.     2 (  0.1%)  id.footlink@tag.a.2@href
+   30.     2 (  0.1%)  .next.0@a@href
+
+  ┌─ TOP 20 选择器 Token
+    1.    20 (  1.0%)  .a
+    2.    14 (  0.7%)  .test
+    3.    14 (  0.7%)  .includes
+    4.    12 (  0.6%)  id.pb_next
+    5.    12 (  0.6%)  .pb_next
+    6.    10 (  0.5%)  id.next_url
+    7.    10 (  0.5%)  .next_url
+    8.     9 (  0.4%)  #next_url
+    9.     9 (  0.4%)  .page
+   10.     9 (  0.4%)  #linkNext
+   11.     6 (  0.3%)  .chapterPages
+   12.     6 (  0.3%)  .match
+   13.     6 (  0.3%)  .replace
+   14.     6 (  0.3%)  #pb_next
+   15.     6 (  0.3%)  class.pagebar
+   16.     6 (  0.3%)  .pagebar
+   17.     6 (  0.3%)  .next
+   18.     5 (  0.2%)  .text-center
+   19.     4 (  0.2%)  id.pt_next
+   20.     4 (  0.2%)  .pt_next
+
+════════════════════════════════════════════════════════════════════════
+  3. 章节目录规则  ruleToc.chapterList
+════════════════════════════════════════════════════════════════════════
+
+  ┌─ TOP 40 完整规则
+    1.    62 (  3.0%)  id.list@tag.dd
+    2.    24 (  1.2%)  $.data
+    3.    22 (  1.1%)  #list-chapterAll dd a
+    4.    21 (  1.0%)  id.list@tag.dd@tag.a
+    5.    19 (  0.9%)  +
+    6.    18 (  0.9%)  $.[*]
+    7.    16 (  0.8%)  .chapter li a
+    8.    16 (  0.8%)  id.list@dd@a
+    9.    14 (  0.7%)  dl@dd@a
+   10.    14 (  0.7%)  .lb li a
+   11.    13 (  0.6%)  dd a
+   12.    12 (  0.6%)  .book_list2 li a
+   13.    12 (  0.6%)  class.zjlist@tag.dd
+   14.    12 (  0.6%)  li a
+   15.    12 (  0.6%)  class.listmain@dd
+   16.    12 (  0.6%)  class.listmain@dd!0:1:2:3:4:5:6:7:8:9:10:11
+   17.    12 (  0.6%)  $..info.episodes.episode[*]||$..info.episodes.music[*]||$.[*]
+   18.    11 (  0.5%)  //div[5]/div/div[3]/div[2]/ul/li
+   19.    11 (  0.5%)  $.data.list[*]
+   20.    10 (  0.5%)  class.listmain@tag.dd!0:1:2:3:4:5:6:7:8:9:10:11
+   21.    10 (  0.5%)  #list dd a
+   22.    10 (  0.5%)  //li[span]/a
+   23.    10 (  0.5%)  $.data.list
+   24.    10 (  0.5%)  id.readerlist@tag.li@tag.a
+   25.     9 (  0.4%)  #readerlist li a
+   26.     9 (  0.4%)  $.rows
+   27.     9 (  0.4%)  data.chapter_lists
+   28.     9 (  0.4%)  #chapterlist p!0@a
+   29.     9 (  0.4%)  .chapter@li@a
+   30.     9 (  0.4%)  class.top_main chapter
+   31.     9 (  0.4%)  class.fulldir@tag.ul@tag.li@tag.a
+   32.     9 (  0.4%)  id.readerlist@tag.li
+   33.     8 (  0.4%)  $.data.chapterList[0].volumeList
+   34.     8 (  0.4%)  .float-list li
+   35.     8 (  0.4%)  -.chapters p
+   36.     8 (  0.4%)  id.list@dd
+   37.     8 (  0.4%)  $.data.chapters
+   38.     7 (  0.3%)  #list-chapterAll@dd
+   39.     7 (  0.3%)  ul@li!-1@a
+   40.     7 (  0.3%)  .col-md-3 a
+
+  ┌─ TOP 30 选择器 Token
+    1.   224 ( 10.9%)  .list
+    2.   176 (  8.6%)  .li
+    3.   139 (  6.8%)  .dd
+    4.   133 (  6.5%)  id.list
+    5.   124 (  6.0%)  .data
+    6.   120 (  5.8%)  $.data
+    7.   113 (  5.5%)  .a
+    8.    93 (  4.5%)  .chapter
+    9.    74 (  3.6%)  .chapters
+   10.    60 (  2.9%)  .listmain
+   11.    53 (  2.6%)  .match
+   12.    45 (  2.2%)  .ul
+   13.    45 (  2.2%)  .chapterlist
+   14.    37 (  1.8%)  class.listmain
+   15.    36 (  1.7%)  #list
+   16.    36 (  1.7%)  .chapterList
+   17.    33 (  1.6%)  #list-chapterAll
+   18.    32 (  1.6%)  .parse
+   19.    32 (  1.6%)  .push
+   20.    32 (  1.6%)  .replace
+   21.    29 (  1.4%)  id.readerlist
+   22.    29 (  1.4%)  .readerlist
+   23.    27 (  1.3%)  .stringify
+   24.    26 (  1.3%)  .book_list2
+   25.    26 (  1.3%)  .section-list
+   26.    26 (  1.3%)  .select
+   27.    25 (  1.2%)  .sort
+   28.    25 (  1.2%)  .attr
+   29.    23 (  1.1%)  class.chapter
+   30.    23 (  1.1%)  #chapterlist
+
+────────────────────────────────────────────────────────────────────────
+  3a. 目录 chapterName 规则  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.   916 ( 44.5%)  text
+    2.   314 ( 15.3%)  tag.a@text
+    3.   234 ( 11.4%)  a@text
+    4.    63 (  3.1%)  $.title
+    5.    55 (  2.7%)  title
+    6.    33 (  1.6%)  name
+    7.    28 (  1.4%)  $.chapterName
+    8.    26 (  1.3%)  $.name
+    9.    15 (  0.7%)  chapterName
+   10.    14 (  0.7%)  $.serialName
+   11.    14 (  0.7%)  $.chapter_name
+   12.    12 (  0.6%)  $.name||$.info.sound.soundstr
+   13.    11 (  0.5%)  html
+   14.    10 (  0.5%)  h1@text
+   15.     9 (  0.4%)  n
+   16.     8 (  0.4%)  @a@text
+   17.     8 (  0.4%)  //a/text()
+   18.     8 (  0.4%)  $2
+   19.     7 (  0.3%)  @JSon:$.title
+   20.     7 (  0.3%)  tag.a.0@text
+
+────────────────────────────────────────────────────────────────────────
+  3b. 目录 chapterUrl 规则  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.   892 ( 43.3%)  href
+    2.   327 ( 15.9%)  tag.a@href
+    3.   274 ( 13.3%)  a@href
+    4.    44 (  2.1%)  url
+    5.    12 (  0.6%)  https://www.missevan.com/sound/getsound?soundid={{$.sound_id||$.info.sound.id}}
+    6.    11 (  0.5%)  playPathAacv224
+    7.    10 (  0.5%)  id
+    8.     9 (  0.4%)  tag.a.0@href
+    9.     9 (  0.4%)  $1
+   10.     9 (  0.4%)  u
+   11.     9 (  0.4%)  $.path
+   12.     8 (  0.4%)  @a@href
+   13.     8 (  0.4%)  https://novel.html5.qq.com/be-api/content/ads-read,{
+	"method": "POST",
+	"body": {
+		"Scene": "chapter",
+		"ContentAnchorBatch": [{
+				"BookID": "{{baseUrl.match(/bookId=(\d+)/)[1]}}",
+				"ChapterSeqNo": [{{$.serialID}}]
+			}]
+	},
+	"headers": {
+		"Q-GUID": "4aa27c7cf2d9aca3359656ea186488cb"
+	}
+}
+   14.     8 (  0.4%)  //a/@href
+   15.     7 (  0.3%)  $.seq_id
+   16.     7 (  0.3%)  tag.a.0@href||tag.a.0@rel
+   17.     7 (  0.3%)  https://a.heiyan.com/ajax/chapter/content/$1
+   18.     6 (  0.3%)  dd@a@href
+   19.     6 (  0.3%)  https://m.kanman.com/api/getchapterinfov2?product_id=1&productname=kmh&platformname=wap&comic_id=@get:{bid}&chapter_newid={{$.chapter_newid}}&isWebp=1&quality=low
+   20.     6 (  0.3%)  a.0@href
+
+────────────────────────────────────────────────────────────────────────
+  3c. 目录容器 ID 专项  TOP 25
+────────────────────────────────────────────────────────────────────────
+    1.   181 (  8.8%)  id="list"
+    2.    48 (  2.3%)  id="list-chapterAll"
+    3.    47 (  2.3%)  id="readerlist"
+    4.    38 (  1.8%)  id="chapterlist"
+    5.    18 (  0.9%)  id="chapterList"
+    6.    14 (  0.7%)  id="all-chapter"
+    7.    14 (  0.7%)  id="chapter"
+    8.     9 (  0.4%)  id="content_1"
+    9.     7 (  0.3%)  id="BookText"
+   10.     7 (  0.3%)  id="chapters-list"
+   11.     6 (  0.3%)  id="newlist"
+   12.     6 (  0.3%)  id="mulun"
+   13.     6 (  0.3%)  id="add_chapter_list_link"
+   14.     5 (  0.2%)  id="detail-list-select"
+   15.     5 (  0.2%)  id="chapterlsit"
+   16.     5 (  0.2%)  id="ul_all_chapters"
+   17.     5 (  0.2%)  id="yulan"
+   18.     4 (  0.2%)  id="play_0"
+   19.     3 (  0.1%)  id="readerlists"
+   20.     3 (  0.1%)  id="song-list-pre-cache"
+   21.     2 (  0.1%)  id="ul_chapter1"
+   22.     2 (  0.1%)  id="lbks"
+   23.     2 (  0.1%)  id="section-list"
+   24.     2 (  0.1%)  id="chapter_list"
+   25.     2 (  0.1%)  id="content-list"
+
+────────────────────────────────────────────────────────────────────────
+  3d. 目录容器 CLASS 专项  TOP 25
+────────────────────────────────────────────────────────────────────────
+    1.   225 ( 10.9%)  class="list"
+    2.   177 (  8.6%)  class="li"
+    3.   139 (  6.8%)  class="dd"
+    4.   119 (  5.8%)  class="chapter"
+    5.   114 (  5.5%)  class="data"
+    6.   113 (  5.5%)  class="a"
+    7.    97 (  4.7%)  class="listmain"
+    8.    90 (  4.4%)  class="chapters"
+    9.    50 (  2.4%)  class="chapterlist"
+   10.    45 (  2.2%)  class="ul"
+   11.    36 (  1.7%)  class="chapterList"
+   12.    31 (  1.5%)  class="section-list"
+   13.    31 (  1.5%)  class="episodes"
+   14.    30 (  1.5%)  class="zjlist"
+   15.    30 (  1.5%)  class="catalog_ls"
+   16.    30 (  1.5%)  class="info"
+   17.    29 (  1.4%)  class="readerlist"
+   18.    28 (  1.4%)  class="book_list"
+   19.    28 (  1.4%)  class="pc_list"
+   20.    27 (  1.3%)  class="float-list"
+   21.    26 (  1.3%)  class="book_list2"
+   22.    26 (  1.3%)  class="book_last"
+   23.    25 (  1.2%)  class="lb"
+   24.    24 (  1.2%)  class="novel_list"
+   25.    24 (  1.2%)  class="top_main"
+
+════════════════════════════════════════════════════════════════════════
+  4. 书籍信息规则  ruleBookInfo
+════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────────────────
+  4a. 书名 name  TOP 25
+────────────────────────────────────────────────────────────────────────
+    1.   157 (  7.6%)  [property="og:novel:book_name"]@content
+    2.   137 (  6.7%)  h1@text
+    3.    97 (  4.7%)  [property$=book_name]@content
+    4.    84 (  4.1%)  @get:{n}
+    5.    45 (  2.2%)  id.info@tag.h1.0@text
+    6.    43 (  2.1%)  id.info@h1@text
+    7.    29 (  1.4%)  tag.h1@text
+    8.    25 (  1.2%)  class.info@h2@text
+    9.    24 (  1.2%)  h2@text
+   10.    23 (  1.1%)  $.title
+   11.    20 (  1.0%)  id.info@tag.h1@text
+   12.    18 (  0.9%)  $.novelName
+   13.    16 (  0.8%)  class.title@text
+   14.    15 (  0.7%)  .xx li.0@text
+   15.    14 (  0.7%)  [property="og:title"]@content
+   16.    11 (  0.5%)  class.info@tag.h2@text
+   17.    11 (  0.5%)  n
+   18.    11 (  0.5%)  $.bookName
+   19.    11 (  0.5%)  $.book_name
+   20.    11 (  0.5%)  [property=og:novel:book_name]@content
+   21.    10 (  0.5%)  name
+   22.    10 (  0.5%)  .block_txt2@h2@text
+   23.     9 (  0.4%)  class.d_title@tag.h1@text
+   24.     9 (  0.4%)  class.name@text
+   25.     9 (  0.4%)  title@put:{bid:id}
+
+────────────────────────────────────────────────────────────────────────
+  4b. 作者 author  TOP 25
+────────────────────────────────────────────────────────────────────────
+    1.   171 (  8.3%)  [property="og:novel:author"]@content
+    2.   103 (  5.0%)  [property$=author]@content
+    3.    83 (  4.0%)  @get:{a}
+    4.    71 (  3.4%)  id.info@tag.p.0@text
+    5.    39 (  1.9%)  $.author
+    6.    35 (  1.7%)  $.authorName
+    7.    28 (  1.4%)  author
+    8.    17 (  0.8%)  .author@text
+    9.    15 (  0.7%)  class.info@class.small@tag.span.0@text
+   10.    15 (  0.7%)  .xx a.1@text
+   11.    14 (  0.7%)  class.author@text
+   12.    14 (  0.7%)  [property=og:novel:author]@content
+   13.    13 (  0.6%)  p.0@text
+   14.    12 (  0.6%)  $..author
+   15.    12 (  0.6%)  class.author.0@text
+   16.    12 (  0.6%)  id.info@p.0@text
+   17.    12 (  0.6%)  class.small@tag.span.0@text
+   18.    11 (  0.5%)  class.info@tag.span.0@text
+   19.    11 (  0.5%)  a
+   20.    11 (  0.5%)  @get:{x}
+   21.     9 (  0.4%)  class.novelinfo-l@tag.li.0@text
+   22.     8 (  0.4%)  //meta[@property="og:novel:author"]/@content
+   23.     8 (  0.4%)  class.author@tag.a@text
+   24.     7 (  0.3%)  class.options@tag.span.0@text
+   25.     7 (  0.3%)  class.red.0@text
+
+────────────────────────────────────────────────────────────────────────
+  4c. 简介 intro  TOP 25
+────────────────────────────────────────────────────────────────────────
+    1.   118 (  5.7%)  [property="og:description"]@content
+    2.    85 (  4.1%)  id.intro@text
+    3.    77 (  3.7%)  @get:{i}
+    4.    75 (  3.6%)  [property$=description]@content
+    5.    32 (  1.6%)  class.intro@text
+    6.    27 (  1.3%)  .intro_info@text
+    7.    24 (  1.2%)  .intro@text
+    8.    21 (  1.0%)  id.intro@tag.p.0@text
+    9.    20 (  1.0%)  [property=og:description]@content
+   10.    18 (  0.9%)  intro
+   11.    17 (  0.8%)  🔔 更新时间：{{@@[property="og:novel:update_time"]@content
+   12.    13 (  0.6%)  $..summary
+   13.    13 (  0.6%)  .jianjie@html
+   14.    12 (  0.6%)  class.intro_info@text
+   15.    12 (  0.6%)  .bookintro@text
+   16.    12 (  0.6%)  class.intro@textNodes
+   17.    11 (  0.5%)  #intro@html
+   18.    10 (  0.5%)  .intro_info@html
+   19.     9 (  0.4%)  //meta[@property="og:description"]/@content
+   20.     9 (  0.4%)  i
+   21.     9 (  0.4%)  id.intro@html
+   22.     9 (  0.4%)  class.top_main.0@tag.p@text
+   23.     9 (  0.4%)  class.novelintro@text
+   24.     9 (  0.4%)  .intro@html
+   25.     9 (  0.4%)  class.info@ownText
+
+────────────────────────────────────────────────────────────────────────
+  4d. 封面 coverUrl  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.   160 (  7.8%)  [property="og:image"]@content
+    2.   123 (  6.0%)  img@src
+    3.    90 (  4.4%)  [property$=image]@content
+    4.    77 (  3.7%)  @get:{c}
+    5.    42 (  2.0%)  id.fmimg@img@src
+    6.    42 (  2.0%)  id.fmimg@tag.img@src
+    7.    26 (  1.3%)  class.cover@img@src
+    8.    20 (  1.0%)  .block_img2@img@src
+    9.    19 (  0.9%)  $.cover
+   10.    17 (  0.8%)  id.fmimg@tag.img.0@src
+   11.    15 (  0.7%)  class.cover@tag.img@src
+   12.    15 (  0.7%)  cover
+   13.    15 (  0.7%)  tag.img.1@src
+   14.    15 (  0.7%)  [property=og:image]@content
+   15.    14 (  0.7%)  class.pic@img@src
+   16.    13 (  0.6%)  img.0@src
+   17.    13 (  0.6%)  tag.img@src
+   18.    12 (  0.6%)  id.bookimg@img@src
+   19.    12 (  0.6%)  .cover@img@src
+   20.    10 (  0.5%)  c
+
+────────────────────────────────────────────────────────────────────────
+  4e. 分类/标签 kind  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.   153 (  7.4%)  [property~=category|status|update_time]@content
+    2.    77 (  3.7%)  @get:{k}
+    3.    52 (  2.5%)  [property="og:novel:category"]@content&&[property="og:novel:status"]@content&&[property="og:novel:update_time"]@content
+    4.    33 (  1.6%)  id.info@tag.p.2@text
+    5.    33 (  1.6%)  [property=og:novel:update_time]@content&&
+[property=og:novel:category]@content&&
+[property=og:novel:status]@content
+    6.    20 (  1.0%)  [property="og:novel:category"]@content
+    7.    19 (  0.9%)  [property="og:novel:category"]@content&&[property="og:novel:status"]@content
+    8.    15 (  0.7%)  [property="og:novel:category"]@content&&
+[property="og:novel:status"]@content&&
+[property="og:novel:update_time"]@content
+    9.    14 (  0.7%)  class.info@class.small@tag.span.4@text&&
+class.info@class.small@tag.span.1@text&&
+class.info@class.small@tag.span.2@text
+   10.    14 (  0.7%)  class.detail-count@text&&class.detail-newest@text&&class.detail-author@text&&class.detail-type@text&&class.detail-tags@text
+   11.    12 (  0.6%)  .xx a.0@text
+   12.    11 (  0.5%)  k
+   13.    10 (  0.5%)  class.info@tag.span.1@text
+   14.     9 (  0.4%)  .block_txt2@p.3:4:5@text
+   15.     8 (  0.4%)  book_tag_list[*].title
+   16.     8 (  0.4%)  kind
+   17.     8 (  0.4%)  class.tags@a@text
+   18.     7 (  0.3%)  //meta[@property="og:novel:category"]/@content
+   19.     7 (  0.3%)  {{$.userscore}}分
+{{$.subject}}
+{{java.getString('$.isfinish')=='true'?'已完结':'连载中'}}
+{{java.put('time',String(java.timeFormat(java.getString('$.lastUpdatetime')*1000)).replace(/\//g,'-').replace(/\s.*/,''))}}
+   20.     7 (  0.3%)  $.item.tags[*]&&$.rights
+
+────────────────────────────────────────────────────────────────────────
+  4f. 最新章节 lastChapter  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.    84 (  4.1%)  [property="og:novel:latest_chapter_name"]@content
+    2.    82 (  4.0%)  @get:{l}
+    3.    72 (  3.5%)  [property$=latest_chapter_name]@content
+    4.    52 (  2.5%)  [property~=las?test_chapter_name]@content
+    5.    30 (  1.5%)  id.info@tag.p.3@a@text
+    6.    18 (  0.9%)  class.update@a@text
+    7.    17 (  0.8%)  id.list@tag.dd.0@a@text
+    8.    16 (  0.8%)  [property=og:novel:latest_chapter_name]@content
+    9.    15 (  0.7%)  [property$=chapter_name]@content
+   10.    14 (  0.7%)  .xx a.2@text
+   11.    13 (  0.6%)  class.info@class.small@tag.span.5@a@text
+   12.    12 (  0.6%)  class.small@tag.span.5@a@text
+   13.    11 (  0.5%)  l
+   14.    11 (  0.5%)  @get:{z}
+   15.    10 (  0.5%)  class.block_txt2@tag.p.6@a@text
+   16.     9 (  0.4%)  [property$=lastest_chapter_name]@content
+   17.     9 (  0.4%)  id.info@tag.p.3@tag.a@text
+   18.     8 (  0.4%)  latest
+   19.     7 (  0.3%)  $..lastSerialname
+   20.     7 (  0.3%)  h3@a@text
+
+════════════════════════════════════════════════════════════════════════
+  5. 搜索结果规则  ruleSearch
+════════════════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────────────────
+  5a. 书列 bookList  TOP 30
+────────────────────────────────────────────────────────────────────────
+    1.    84 (  4.1%)  class.grid@tag.tr!0
+    2.    63 (  3.1%)  .bookbox
+    3.    43 (  2.1%)  class.bookbox
+    4.    27 (  1.3%)  $.[*]
+    5.    23 (  1.1%)  .hot_sale
+    6.    23 (  1.1%)  tbody@tr!0
+    7.    22 (  1.1%)  .line
+    8.    20 (  1.0%)  .item
+    9.    18 (  0.9%)  $.data[*]
+   10.    17 (  0.8%)  tbody@tr
+   11.    16 (  0.8%)  $.data.content[*]
+   12.    15 (  0.7%)  #nr
+   13.    15 (  0.7%)  $.data
+   14.    15 (  0.7%)  .block
+   15.    15 (  0.7%)  class.block
+   16.    15 (  0.7%)  class.bookbox@class.p10
+   17.    14 (  0.7%)  .col-md-6@dl
+   18.    14 (  0.7%)  id.sitebox@dl
+   19.    13 (  0.6%)  tbody tr!0
+   20.    13 (  0.6%)  .fk li
+   21.    13 (  0.6%)  id.sitembox@tag.dl
+   22.    12 (  0.6%)  tbody tr
+   23.    12 (  0.6%)  .txt-list@li!0
+   24.    12 (  0.6%)  class.BOX@tag.tr!0||class.shu_cont@children
+   25.    12 (  0.6%)  $.list
+   26.    11 (  0.5%)  tag.tbody@tag.tr!0
+   27.    11 (  0.5%)  .search_list
+   28.    11 (  0.5%)  id.nr
+   29.    11 (  0.5%)  $.response.docs
+   30.    10 (  0.5%)  $..list[*]
+
+────────────────────────────────────────────────────────────────────────
+  5b. 书名 name  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.   166 (  8.1%)  a.1@text
+    2.   113 (  5.5%)  a.0@text
+    3.    68 (  3.3%)  $.name
+    4.    62 (  3.0%)  $.title
+    5.    59 (  2.9%)  h4@text
+    6.    52 (  2.5%)  tag.a.0@text
+    7.    51 (  2.5%)  h3@text
+    8.    40 (  1.9%)  tag.a.1@text
+    9.    37 (  1.8%)  h3@a@text
+   10.    37 (  1.8%)  tag.td.0@tag.a@text
+   11.    36 (  1.7%)  h2@text
+   12.    33 (  1.6%)  name
+   13.    33 (  1.6%)  a@text
+   14.    32 (  1.6%)  h4@a@text
+   15.    26 (  1.3%)  td.0@text
+   16.    25 (  1.2%)  title
+   17.    20 (  1.0%)  .bookname@text
+   18.    20 (  1.0%)  $.bookName
+   19.    19 (  0.9%)  class.bookname@tag.a@text
+   20.    17 (  0.8%)  class.even.0@tag.a.0@text
+
+────────────────────────────────────────────────────────────────────────
+  5c. 书URL bookUrl  TOP 20
+────────────────────────────────────────────────────────────────────────
+    1.   330 ( 16.0%)  a.0@href
+    2.   234 ( 11.4%)  a@href
+    3.   167 (  8.1%)  a.1@href
+    4.   125 (  6.1%)  tag.a.0@href
+    5.    63 (  3.1%)  tag.a@href
+    6.    50 (  2.4%)  tag.a.1@href
+    7.    39 (  1.9%)  tag.td.0@tag.a@href
+    8.    38 (  1.8%)  h4@a@href
+    9.    29 (  1.4%)  $.id
+   10.    19 (  0.9%)  class.odd.0@tag.a@href
+   11.    18 (  0.9%)  h3@a@href
+   12.    17 (  0.8%)  class.bookname@tag.a@href
+   13.    17 (  0.8%)  class.even.0@tag.a.0@href
+   14.    15 (  0.7%)  .s2@a@href
+   15.    14 (  0.7%)  href
+   16.    14 (  0.7%)  tag.td.0@tag.a.0@href
+   17.    13 (  0.6%)  class.s2@tag.a@href
+   18.    13 (  0.6%)  class.odd.0@tag.a.0@href
+   19.    12 (  0.6%)  class.red@href||class.shu_xinxi@h4@a@href
+   20.    11 (  0.5%)  $.bid
+
+════════════════════════════════════════════════════════════════════════
+  6. 发现列表规则  ruleExplore.bookList  TOP 30
+════════════════════════════════════════════════════════════════════════
+    1.    44 (  2.1%)  class.l@li
+    2.    23 (  1.1%)  $.data
+    3.    20 (  1.0%)  class.hot_sale
+    4.    15 (  0.7%)  .hot_sale
+    5.    15 (  0.7%)  //div[5]/div[2]/div/ul/li
+    6.    13 (  0.6%)  .list ul
+    7.    12 (  0.6%)  $.data.books
+    8.    12 (  0.6%)  $.data[*]
+    9.    12 (  0.6%)  $.info.Datas
+   10.    10 (  0.5%)  .tt||.content_link
+   11.     9 (  0.4%)  .CGsectionTwo-right-content-unit
+   12.     9 (  0.4%)  .line
+   13.     9 (  0.4%)  .media
+   14.     9 (  0.4%)  $.dataList
+   15.     8 (  0.4%)  tbody tr!0
+   16.     8 (  0.4%)  //*[@id="resultDiv"]/tr
+   17.     8 (  0.4%)  #alistbox
+   18.     8 (  0.4%)  $.items[*]
+   19.     7 (  0.3%)  $.rows[*]
+   20.     7 (  0.3%)  tbody!1:2@tr
+   21.     7 (  0.3%)  id.sitembox@tag.dl
+   22.     7 (  0.3%)  tbody@tr!0||class.b module@tag.li!-1
+   23.     7 (  0.3%)  $..list[*]
+   24.     6 (  0.3%)  .listBox ul li
+   25.     6 (  0.3%)  class.l@tag.ul@tag.li
+   26.     6 (  0.3%)  .l li
+   27.     6 (  0.3%)  class.article
+   28.     6 (  0.3%)  $.data.list
+   29.     6 (  0.3%)  class.sitebox@dl
+   30.     6 (  0.3%)  tbody.0@tr
+
+════════════════════════════════════════════════════════════════════════
+  7. 跨所有字段通用选择器 Token TOP 60
+════════════════════════════════════════════════════════════════════════
+  （在任意规则字段中出现次数总和，反映哪些 CSS class/id / JSONPath 覆盖最广）
+
+    1.   449 ( 21.8%)  .content
+    2.   262 ( 12.7%)  id.content
+    3.   224 ( 10.9%)  .list
+    4.   189 (  9.2%)  .li
+    5.   182 (  8.8%)  .data
+    6.   176 (  8.6%)  $.data
+    7.   139 (  6.8%)  .dd
+    8.   133 (  6.5%)  .a
+    9.   133 (  6.5%)  id.list
+   10.   127 (  6.2%)  .chapter
+   11.   123 (  6.0%)  #content
+   12.   103 (  5.0%)  .match
+   13.    93 (  4.5%)  .replace
+   14.    74 (  3.6%)  #nr1
+   15.    74 (  3.6%)  .chapters
+   16.    67 (  3.3%)  .join
+   17.    65 (  3.2%)  .map
+   18.    63 (  3.1%)  .p
+   19.    63 (  3.1%)  $.content
+   20.    60 (  2.9%)  .listmain
+   21.    59 (  2.9%)  .split
+   22.    58 (  2.8%)  .parse
+   23.    55 (  2.7%)  .stringify
+   24.    50 (  2.4%)  .ajax
+   25.    46 (  2.2%)  .ul
+   26.    46 (  2.2%)  .htmlContent
+   27.    45 (  2.2%)  .chapterlist
+   28.    40 (  1.9%)  #chaptercontent
+   29.    40 (  1.9%)  .chaptercontent
+   30.    40 (  1.9%)  .length
+   31.    39 (  1.9%)  class.content
+   32.    39 (  1.9%)  .info
+   33.    38 (  1.8%)  id.nr1
+   34.    38 (  1.8%)  .nr1
+   35.    38 (  1.8%)  .push
+   36.    37 (  1.8%)  class.listmain
+   37.    36 (  1.7%)  #list
+   38.    36 (  1.7%)  id.chaptercontent
+   39.    36 (  1.7%)  .chapterList
+   40.    33 (  1.6%)  #list-chapterAll
+   41.    32 (  1.6%)  .sort
+   42.    32 (  1.6%)  #nr
+   43.    31 (  1.5%)  class.chapter
+   44.    31 (  1.5%)  $.info
+   45.    29 (  1.4%)  .readcontent
+   46.    29 (  1.4%)  id.readerlist
+   47.    29 (  1.4%)  .readerlist
+   48.    29 (  1.4%)  .base64Decode
+   49.    29 (  1.4%)  .select
+   50.    28 (  1.4%)  .attr
+   51.    27 (  1.3%)  .font_max
+   52.    27 (  1.3%)  #novelcontent
+   53.    26 (  1.3%)  .test
+   54.    26 (  1.3%)  .book_list2
+   55.    26 (  1.3%)  id.htmlContent
+   56.    26 (  1.3%)  .section-list
+   57.    26 (  1.3%)  .url
+   58.    25 (  1.2%)  .body
+   59.    25 (  1.2%)  .text
+   60.    25 (  1.2%)  .log
+
+════════════════════════════════════════════════════════════════════════
+  8. 通用规则探测器建议（基于统计优先级）
+════════════════════════════════════════════════════════════════════════
+
+  ▶ 正文内容 (ruleContent.content) 探测链 — 按命中率从高到低依次尝试：
+    id.content            → 19.1% (id="content")
+    id.nr1                →  5.5% (id="nr1")
+    id.chaptercontent     →  3.7% (id="chaptercontent")
+    id.nr                 →  2.3% (id="nr")
+    id.htmlContent        →  2.2% (id="htmlContent")
+    id.novelcontent       →  1.9% (id="novelcontent")
+    id.booktxt            →  1.1% (id="booktxt")
+    id.cont-body          →  1.1% (id="cont-body")
+    id.TextContent        →  1.0% (id="TextContent")
+    id.ChapterContents    →  0.9% (id="ChapterContents")
+    class.content         →  2.0% (class="content") [需排除非正文容器]
+    class.readcontent     →  2.1%
+    class.chaptercontent  →  2.0%
+    class.font_max        →  1.9%
+    class.read-content    →  1.6%
+    class.article-content →  1.5%
+    class.novelcontent    →  1.2%
+    class.acontent        →  1.2%
+    class.page-content    →  1.3%
+
+  ▶ 下一页 (ruleContent.nextContentUrl) 探测链：
+    text.下一页@href       → 15.7%  (最高优先级)
+    text.下一@href         →  2.6%
+    text.下一章@href       →  2.2%   [注意: 此规则可能跳章节]
+    id.pb_next@href        →  0.5%
+    id.next_url@href       →  0.4%
+    #linkNext@href         →  0.4%
+    class.pagebar@a.-1@href→  0.3%
+
+  ▶ 章节目录 (ruleToc.chapterList) 探测链：
+    id.list@tag.dd         →  3.0%  (最高精确匹配)
+    id="list"              →  8.8%  (id 覆盖最广)
+    id.readerlist          →  2.3%
+    id.list-chapterAll     →  2.3%
+    id.chapterlist         →  1.8%
+    class.listmain@dd      →  4.7%  (class 覆盖率最高)
+    class.chapterlist      →  2.4%
+    class.zjlist           →  1.5%
+    class.catalog_ls       →  1.5%
+    class.book_list        →  1.4%
+
+  ▶ 书籍信息 (ruleBookInfo) 通用 og meta 方案（单书源一次全取）：
+    name:        [property="og:novel:book_name"]@content        7.6%
+    author:      [property="og:novel:author"]@content           8.3%
+    intro:       [property="og:description"]@content            5.7%
+    coverUrl:    [property="og:image"]@content                  7.8%
+    kind:        [property~=category|status|update_time]@content 7.4%
+    lastChapter: [property="og:novel:latest_chapter_name"]@content 4.1%
+
+════════════════════════════════════════════════════════════════════════
+  分析完成  共处理 2058 条书源  |  跳过 0 个无效文件
+════════════════════════════════════════════════════════════════════════

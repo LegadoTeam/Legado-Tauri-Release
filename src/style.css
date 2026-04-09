@@ -1,0 +1,134 @@
+/* ============================================================
+   CSS 设计令牌
+   ============================================================ */
+:root {
+  /* 尺寸 */
+  --titlebar-h: 40px;
+  --taskbar-h: 28px;
+  --sidebar-w: 200px;
+  --sidebar-collapsed-w: 48px;
+  --bottomnav-h: 56px;
+
+  /* 间距 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* 圆角 */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+
+  /* 语义色 */
+  --color-danger: #ef4444;
+  --color-danger-subtle: rgba(239, 68, 68, 0.10);
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-surface-sunken: #e4e4e7;
+
+  /* 过渡 */
+  --transition-fast: 120ms ease;
+  --transition-base: 220ms ease;
+
+  /* 颜色——亮色主题 */
+  --color-surface: #f4f4f5;
+  --color-surface-raised: #ffffff;
+  --color-surface-hover: #e4e4e7;
+  --color-border: #e4e4e7;
+
+  --color-text-primary: #18181b;
+  --color-text-secondary: #52525b;
+  --color-text-muted: #a1a1aa;
+
+  --color-accent: #6366f1;
+  --color-accent-subtle: #eef2ff;
+
+  /* 侧边栏 — 固定深色，不跟随系统主题 */
+  --color-sidebar-bg: #1c1c1f;
+  --color-sidebar-border: rgba(255, 255, 255, 0.06);
+  --color-sidebar-text: #d4d4d8;
+  --color-sidebar-text-muted: #71717a;
+  --color-sidebar-hover: rgba(255, 255, 255, 0.07);
+  --color-sidebar-active-bg: rgba(99, 102, 241, 0.18);
+  --color-sidebar-active-text: #a5b4fc;
+
+  font-family: Inter, 'Noto Sans SC', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 暗色主题 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #18181b;
+    --color-surface-raised: #27272a;
+    --color-surface-hover: #3f3f46;
+    --color-border: #3f3f46;
+
+    --color-text-primary: #fafafa;
+    --color-text-secondary: #a1a1aa;
+    --color-text-muted: #71717a;
+
+    --color-accent: #818cf8;
+    --color-accent-subtle: #1e1b4b;
+
+    --color-danger: #f87171;
+    --color-danger-subtle: rgba(248, 113, 113, 0.12);
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-surface-sunken: #09090b;
+  }
+}
+
+/* ============================================================
+   Reset
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app {
+  height: 100%;
+  overflow: hidden;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font: inherit;
+}
+
+/* ============================================================
+   移动端适配
+   ============================================================ */
+@media (pointer: coarse), (max-width: 640px) {
+  :root {
+    --titlebar-h: 44px;
+    --space-md: 12px;
+    --space-lg: 16px;
+  }
+
+  /* 禁用双击缩放，确保安卓上单击稳定触发 */
+  html {
+    touch-action: manipulation;
+  }
+
+  /* Naive UI 弹窗在移动端限制宽度不超屏 */
+  .n-modal {
+    max-width: 100vw !important;
+  }
+
+  /* 去除 Android 点击高亮 */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
