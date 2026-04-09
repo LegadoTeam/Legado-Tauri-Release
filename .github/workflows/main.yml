@@ -48,7 +48,7 @@ jobs:
         uses: actions/setup-node@main
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       # ---------------- Install pnpm (关键修复) ----------------
       - name: Install pnpm globally
@@ -130,7 +130,7 @@ jobs:
         uses: actions/setup-node@main
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       - name: Install pnpm globally
         run: npm install -g pnpm
