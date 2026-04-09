@@ -38,27 +38,29 @@ jobs:
     steps:
       # ---------------- 拉取私有仓库源码 ----------------
       - name: Checkout Private Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
         with:
           repository: LegadoTeam/Legado-Tauri
           token: ${{ secrets.TOKEN_MGZ }}
           fetch-depth: 0
 
       # ---------------- Node + pnpm（关键修复） ----------------
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@main
+      
+      - uses: pnpm/action-setup@main
         with:
-          node-version: 24
-          cache: pnpm   
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pnpm
-        run: corepack prepare pnpm@9.12.0 --activate
-
-      - name: Verify pnpm
-        run: pnpm -v
+          version: 9.12.0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      
+      - run: pnpm install --frozen-lockfile
+      
+      - run: pnpm run build:tauri
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
       # ---------------- Install deps ----------------
       - name: Install dependencies
@@ -123,31 +125,36 @@ jobs:
     steps:
       # ---------------- 私有仓库 ----------------
       - name: Checkout Private Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
         with:
           repository: LegadoTeam/Legado-Tauri
           token: ${{ secrets.TOKEN_MGZ }}
           fetch-depth: 0
 
       # ---------------- Node + pnpm ----------------
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@main
+      
+      - uses: pnpm/action-setup@main
         with:
-          node-version: 24
+          version: 9.12.0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
           cache: pnpm
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Activate pnpm
-        run: corepack prepare pnpm@9.12.0 --activate
+      
+      - run: pnpm install --frozen-lockfile
+      
+      - run: pnpm run build:tauri
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       # ---------------- Rust cache ----------------
       - name: Rust cache
-        uses: Swatinem/rust-cache@v2
+        uses: Swatinem/rust-cache@master
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -159,14 +166,14 @@ jobs:
 
       # ---------------- Java（修复关键点） ----------------
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@main
         with:
           distribution: temurin
           java-version: 17
 
       # ---------------- Android SDK ----------------
       - name: Setup Android
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@main
 
       # ---------------- Build ----------------
       - name: Build Android
@@ -174,7 +181,7 @@ jobs:
 
       # ---------------- Upload ----------------
       - name: Upload Android artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: android-${{ matrix.target }}
           path: |
@@ -190,12 +197,12 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@main
         with:
           path: dist
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@master
         with:
           files: dist/**/*
         env:
