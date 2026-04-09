@@ -12,6 +12,7 @@ permissions:
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
+  NODE_OPTIONS: --max-old-space-size=6144   
 
 jobs:
   build-desktop:
@@ -37,25 +38,27 @@ jobs:
     steps:
       # ---------------- 拉取私有仓库源码 ----------------
       - name: Checkout Private Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           repository: LegadoTeam/Legado-Tauri
           token: ${{ secrets.TOKEN_MGZ }}
           fetch-depth: 0
 
+      # ---------------- Node + pnpm（关键修复） ----------------
       - name: Setup Node
-        uses: actions/setup-node@main
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
-      
+          node-version: 20
+          cache: pnpm   
+
       - name: Enable Corepack
         run: corepack enable
-      
+
       - name: Activate pnpm
         run: corepack prepare pnpm@9.12.0 --activate
-      
+
       - name: Verify pnpm
-        run: which pnpm && pnpm -v
+        run: pnpm -v
 
       # ---------------- Install deps ----------------
       - name: Install dependencies
@@ -63,7 +66,7 @@ jobs:
 
       # ---------------- Rust cache ----------------
       - name: Rust cache
-        uses: Swatinem/rust-cache@master
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -95,7 +98,7 @@ jobs:
 
       # ---------------- Upload ----------------
       - name: Upload artifacts
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: desktop-${{ matrix.target }}
           path: |
@@ -110,6 +113,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         target:
           - aarch64-linux-android
@@ -117,35 +121,33 @@ jobs:
           - x86_64-linux-android
 
     steps:
-      # ---------------- 私有仓库拉取 ----------------
+      # ---------------- 私有仓库 ----------------
       - name: Checkout Private Repo
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           repository: LegadoTeam/Legado-Tauri
           token: ${{ secrets.TOKEN_MGZ }}
           fetch-depth: 0
 
-      # ---------------- Node ----------------
+      # ---------------- Node + pnpm ----------------
       - name: Setup Node
-        uses: actions/setup-node@main
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
-      
+          node-version: 20
+          cache: pnpm
+
       - name: Enable Corepack
         run: corepack enable
-      
+
       - name: Activate pnpm
         run: corepack prepare pnpm@9.12.0 --activate
-      
-      - name: Verify pnpm
-        run: which pnpm && pnpm -v
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       # ---------------- Rust cache ----------------
       - name: Rust cache
-        uses: Swatinem/rust-cache@master
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -155,16 +157,16 @@ jobs:
       - name: Install cargo-ndk
         run: cargo install cargo-ndk
 
-      # ---------------- Java 17 ----------------
+      # ---------------- Java（修复关键点） ----------------
       - name: Setup Java
-        uses: actions/setup-java@main
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
       # ---------------- Android SDK ----------------
       - name: Setup Android
-        uses: android-actions/setup-android@main
+        uses: android-actions/setup-android@v3
 
       # ---------------- Build ----------------
       - name: Build Android
@@ -172,7 +174,7 @@ jobs:
 
       # ---------------- Upload ----------------
       - name: Upload Android artifacts
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: android-${{ matrix.target }}
           path: |
@@ -188,12 +190,12 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@main
+        uses: actions/download-artifact@v4
         with:
           path: dist
 
       - name: Create Release
-        uses: softprops/action-gh-release@master
+        uses: softprops/action-gh-release@v2
         with:
           files: dist/**/*
         env:
