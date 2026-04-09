@@ -1,0 +1,190 @@
+name: Release Build (Multi-Arch Private Repo)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-desktop:
+    name: Desktop Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            build_cmd: build:windows
+
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            build_cmd: build:tauri
+
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            build_cmd: build:tauri
+
+    steps:
+      # ---------------- 拉取私有仓库源码 ----------------
+      - name: Checkout Private Repo
+        uses: actions/checkout@v4
+        with:
+          repository: LegadoTeam/Legado-Tauri
+          token: ${{ secrets.TOKEN_MGZ }}
+          fetch-depth: 0
+
+      # ---------------- Node + pnpm cache ----------------
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ---------------- Rust cache ----------------
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      # ---------------- Linux deps ----------------
+      - name: Install Linux deps
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl wget file \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      # ---------------- macOS deps ----------------
+      - name: macOS deps
+        if: matrix.os == 'macos-latest'
+        run: brew install create-dmg || true
+
+      # ---------------- Build ----------------
+      - name: Build Desktop
+        run: pnpm run ${{ matrix.build_cmd }}
+
+      # ---------------- Upload ----------------
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.target }}
+          path: |
+            src-tauri/target/**/release/bundle/**
+            src-tauri/target/**/release/*.AppImage
+            src-tauri/target/**/release/*.dmg
+            src-tauri/target/**/release/*.msi
+
+
+  build-android:
+    name: Android Multi-Arch
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target:
+          - aarch64-linux-android
+          - armv7-linux-androideabi
+          - x86_64-linux-android
+
+    steps:
+      # ---------------- 私有仓库拉取 ----------------
+      - name: Checkout Private Repo
+        uses: actions/checkout@v4
+        with:
+          repository: LegadoTeam/Legado-Tauri
+          token: ${{ secrets.TOKEN_MGZ }}
+          fetch-depth: 0
+
+      # ---------------- Node ----------------
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ---------------- Rust cache ----------------
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk
+
+      # ---------------- Java 17 ----------------
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # ---------------- Android SDK ----------------
+      - name: Setup Android
+        uses: android-actions/setup-android@v3
+
+      # ---------------- Build ----------------
+      - name: Build Android
+        run: pnpm run build:android
+
+      # ---------------- Upload ----------------
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ matrix.target }}
+          path: |
+            src-tauri/gen/android/**/build/outputs/**
+            **/*.apk
+            **/*.aab
+
+
+  release:
+    name: GitHub Release
+    needs: [build-desktop, build-android]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
