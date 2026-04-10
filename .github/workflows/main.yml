@@ -65,8 +65,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd build
-          pnpm config set ignore-scripts false
-          pnpm install --no-frozen-lockfile
+          PNPM_IGNORE_SCRIPTS=false pnpm install --no-frozen-lockfile --ignore-scripts=false
 
       - name: Build Frontend
         run: |
