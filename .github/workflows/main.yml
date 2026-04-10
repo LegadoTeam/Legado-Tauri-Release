@@ -62,20 +62,16 @@ jobs:
         with:
           version: 9
 
-      - name: Patch pnpm config
-        run: |
-          cd build
-          node -e "
-          let p=require('./package.json');
-          p.pnpm = p.pnpm || {};
-          p.pnpm.onlyBuiltDependencies = ['esbuild','vue-demi'];
-          require('fs').writeFileSync('package.json', JSON.stringify(p, null, 2));
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           "
 
       - name: Install Dependencies
         run: |
           cd build
-          pnpm install --no-frozen-lockfile
+          pnpm install
 
       - name: Build Frontend
         run: |
