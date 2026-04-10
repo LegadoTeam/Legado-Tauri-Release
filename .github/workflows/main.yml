@@ -54,15 +54,19 @@ jobs:
           restore-keys: |
             pnpm-${{ runner.os }}
 
+
+            
       - name: Setup pnpm
         uses: pnpm/action-setup@master
         with:
-          version: 8
+          version: 9
+          run_install: false
+
 
       - name: Install Dependencies
         run: |
           cd build
-          pnpm install
+          pnpm install --no-frozen-lockfile
 
       - name: Build Frontend
         run: |
