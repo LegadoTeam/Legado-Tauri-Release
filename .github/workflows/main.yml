@@ -106,6 +106,8 @@ jobs:
         run: |
           cd build
           pnpm tauri build
+        env:
+          CARGO_BUILD_JOBS: ${{ matrix.os == 'windows-latest' && '1' || '2' }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
