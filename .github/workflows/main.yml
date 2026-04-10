@@ -62,10 +62,20 @@ jobs:
         with:
           version: 9
 
+      - name: Patch pnpm config
+        run: |
+          cd build
+          node -e "
+          let p=require('./package.json');
+          p.pnpm = p.pnpm || {};
+          p.pnpm.onlyBuiltDependencies = ['esbuild','vue-demi'];
+          require('fs').writeFileSync('package.json', JSON.stringify(p, null, 2));
+          "
+
       - name: Install Dependencies
         run: |
           cd build
-          pnpm install --no-frozen-lockfile --config.enable-pre-post-scripts=true
+          pnpm install --no-frozen-lockfile
 
       - name: Build Frontend
         run: |
