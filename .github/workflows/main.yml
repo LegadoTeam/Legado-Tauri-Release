@@ -75,11 +75,27 @@ jobs:
           cd build
           pnpm install --frozen-lockfile
 
-      - name: Build Frontend
+      - name: Type Check Frontend
         shell: bash
         run: |
           cd build
-          pnpm build
+          pnpm vue-tsc --noEmit
+
+      - name: Build Frontend (macOS)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: |
+          cd build
+          pnpm vite build
+
+      - name: Build Frontend (Non-macOS)
+        if: matrix.os != 'macos-latest'
+        shell: bash
+        run: |
+          cd build
+          pnpm vite build
 
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
