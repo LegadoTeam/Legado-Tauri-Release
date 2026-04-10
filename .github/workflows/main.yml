@@ -1,213 +1,107 @@
-name: Release Build (Multi-Arch Private Repo)
+name: Build Legado Tauri (Full Auto)
 
 on:
   workflow_dispatch:
   push:
     tags:
-      - "v*.*.*"
-
-permissions:
-  contents: write
-
-env:
-  CARGO_TERM_COLOR: always
-  RUST_BACKTRACE: 1
-  NODE_OPTIONS: --max-old-space-size=6144   
+      - 'v*'   # 打 tag 自动发版，例如 v1.0.0
 
 jobs:
-  build-desktop:
-    name: Desktop Build (${{ matrix.target }})
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
     runs-on: ${{ matrix.os }}
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            build_cmd: build:windows
-
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            build_cmd: build:tauri
-
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            build_cmd: build:tauri
-
     steps:
-      # ---------------- 拉取私有仓库源码 ----------------
-      - name: Checkout Private Repo
-        uses: actions/checkout@main
-        with:
-          repository: LegadoTeam/Legado-Tauri
-          token: ${{ secrets.TOKEN_MGZ }}
-          ref: main
-          submodules: recursive
-          fetch-depth: 0 
-          persist-credentials: true
-      # ---------------- Node + pnpm（关键修复） ----------------
-      - uses: actions/checkout@main
-      
-      - uses: pnpm/action-setup@master
-        with:
-          version: 9.12.0
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-      
-      - run: pnpm install --frozen-lockfile
-      
-      - run: pnpm run build:tauri
-        env:
-          NODE_OPTIONS: --max-old-space-size=6144
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # ---------------- Install deps ----------------
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # ---------------- Rust cache ----------------
-      - name: Rust cache
-        uses: Swatinem/rust-cache@v2
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-
-      # ---------------- Linux deps ----------------
-      - name: Install Linux deps
-        if: matrix.os == 'ubuntu-latest'
+      - name: Setup Git Auth
         run: |
-          sudo apt update
-          sudo apt install -y \
-            libwebkit2gtk-4.1-dev \
-            build-essential \
-            curl wget file \
-            libssl-dev \
-            libgtk-3-dev \
-            libayatana-appindicator3-dev \
-            librsvg2-dev
+          git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
 
-      # ---------------- macOS deps ----------------
-      - name: macOS deps
-        if: matrix.os == 'macos-latest'
-        run: brew install create-dmg || true
 
-      # ---------------- Build ----------------
-      - name: Build Desktop
-        run: pnpm run ${{ matrix.build_cmd }}
+      - name: Clone Frontend
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
 
-      # ---------------- Upload ----------------
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - name: Clone Backend
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
+
+      - name: Merge Project
+        shell: bash
+        run: |
+          mkdir build
+          cp -r frontend/* build/
+
+          # 如果 backend 是 tauri 核心
+          if [ -d "backend/src-tauri" ]; then
+            cp -r backend/src-tauri build/
+          else
+            cp -r backend/* build/
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@main
         with:
-          name: desktop-${{ matrix.target }}
-          path: |
-            src-tauri/target/**/release/bundle/**
-            src-tauri/target/**/release/*.AppImage
-            src-tauri/target/**/release/*.dmg
-            src-tauri/target/**/release/*.msi
+          node-version: 20
 
-
-  build-android:
-    name: Android Multi-Arch
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - aarch64-linux-android
-          - armv7-linux-androideabi
-          - x86_64-linux-android
-
-    steps:
-      # ---------------- 私有仓库 ----------------
-      - name: Checkout Private Repo
-        uses: actions/checkout@main
+      - name: Setup pnpm
+        uses: pnpm/action-setup@main
         with:
-          repository: LegadoTeam/Legado-Tauri
-          token: ${{ secrets.TOKEN_MGZ }}
-          ref: main
-          submodules: recursive
-          fetch-depth: 0 
-          persist-credentials: true
-      # ---------------- Node + pnpm ----------------
-      - uses: actions/checkout@main
-      
-      - uses: pnpm/action-setup@master
+          version: 9
+
+      - name: Cache pnpm
+        uses: actions/cache@main
         with:
-          version: 9.12.0
-      
-      - uses: actions/setup-node@main
-        with:
-          node-version: 24
-          cache: pnpm
-      
-      - run: pnpm install --frozen-lockfile
-      
-      - run: pnpm run build:tauri
-        env:
-          NODE_OPTIONS: --max-old-space-size=6144
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install Dependencies
+        run: |
+          cd build
+          pnpm install --frozen-lockfile
 
-      # ---------------- Rust cache ----------------
-      - name: Rust cache
-        uses: Swatinem/rust-cache@master
+      - name: Build Frontend
+        run: |
+          cd build
+          pnpm build
 
-      - name: Setup Rust
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
 
-      - name: Install cargo-ndk
-        run: cargo install cargo-ndk
+      - name: Build Tauri App
+        run: |
+          cd build
+          pnpm tauri build
 
-      # ---------------- Java（修复关键点） ----------------
-      - name: Setup Java
-        uses: actions/setup-java@main
-        with:
-          distribution: temurin
-          java-version: 17
 
-      # ---------------- Android SDK ----------------
-      - name: Setup Android
-        uses: android-actions/setup-android@main
-
-      # ---------------- Build ----------------
-      - name: Build Android
-        run: pnpm run build:android
-
-      # ---------------- Upload ----------------
-      - name: Upload Android artifacts
+      - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
-          name: android-${{ matrix.target }}
+          name: legado-${{ matrix.os }}
           path: |
-            src-tauri/gen/android/**/build/outputs/**
-            **/*.apk
-            **/*.aab
-
+            build/src-tauri/target/release/
+            build/src-tauri/target/release/bundle/
 
   release:
-    name: GitHub Release
-    needs: [build-desktop, build-android]
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@main
-        with:
-          path: dist
+      - name: Download Artifacts
+        uses: actions/download-artifact@master
 
       - name: Create Release
         uses: softprops/action-gh-release@master
         with:
-          files: dist/**/*
+          files: |
+            **/*
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
