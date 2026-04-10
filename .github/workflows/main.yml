@@ -51,7 +51,7 @@ jobs:
           node-version: 20
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@main
+        uses: pnpm/action-setup@master
         with:
           version: 9
 
