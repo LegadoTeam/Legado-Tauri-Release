@@ -62,11 +62,10 @@ jobs:
         with:
           version: 9
 
-      - name: Force allow scripts
+      - name: Install Dependencies
         run: |
           cd build
-          echo "ignore-scripts=false" >> .npmrc
-          pnpm install --no-frozen-lockfile
+          pnpm install --no-frozen-lockfile --config.enable-pre-post-scripts=true
 
       - name: Build Frontend
         run: |
