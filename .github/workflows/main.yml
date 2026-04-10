@@ -62,10 +62,11 @@ jobs:
         with:
           version: 9
 
-      - name: Install Dependencies
+      - name: Force allow scripts
         run: |
           cd build
-          PNPM_IGNORE_SCRIPTS=false pnpm install --no-frozen-lockfile --ignore-scripts=false
+          echo "ignore-scripts=false" >> .npmrc
+          pnpm install --no-frozen-lockfile
 
       - name: Build Frontend
         run: |
