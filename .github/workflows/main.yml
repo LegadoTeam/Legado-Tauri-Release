@@ -81,21 +81,26 @@ jobs:
           cd build
           pnpm vue-tsc --noEmit
 
-      - name: Build Frontend (macOS)
+      - name: Build Tauri App (macOS)
         if: matrix.os == 'macos-latest'
         shell: bash
         env:
           NODE_OPTIONS: --max-old-space-size=6144
+          CARGO_BUILD_JOBS: 1
+          RUSTFLAGS: -C debuginfo=0
         run: |
           cd build
-          pnpm vite build
+          pnpm tauri build
 
-      - name: Build Frontend (Non-macOS)
+      - name: Build Tauri App (Non-macOS)
         if: matrix.os != 'macos-latest'
         shell: bash
+        env:
+          CARGO_BUILD_JOBS: 1
+          RUSTFLAGS: -C debuginfo=0
         run: |
           cd build
-          pnpm vite build
+          pnpm tauri build
 
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
