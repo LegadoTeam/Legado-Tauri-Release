@@ -7,13 +7,9 @@ on:
       - 'v*'
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
-    runs-on: ${{ matrix.os }}
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -81,12 +77,16 @@ jobs:
           cd build
           pnpm vue-tsc --noEmit
 
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
       - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
           sudo apt update
           sudo apt install -y \
+            pkg-config \
+            libglib2.0-dev \
             libwebkit2gtk-4.1-dev \
             build-essential \
             curl \
@@ -95,11 +95,199 @@ jobs:
             libxdo-dev \
             libssl-dev \
             libayatana-appindicator3-dev \
-            librsvg2-dev \
-            pkg-config
-            
-      - name: Build Tauri App (macOS)
-        if: matrix.os == 'macos-latest'
+            librsvg2-dev
+
+          pkg-config --modversion glib-2.0
+          pkg-config --cflags glib-2.0
+          pkg-config --libs glib-2.0
+
+      - name: Build Tauri App
+        shell: bash
+        env:
+          CARGO_BUILD_JOBS: 1
+          RUSTFLAGS: -C debuginfo=0
+        run: |
+          cd build
+          pnpm tauri build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: legado-ubuntu-latest
+          path: |
+            build/src-tauri/target/release/
+            build/src-tauri/target/release/bundle/
+
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Git Auth
+        shell: bash
+        run: |
+          git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone Frontend
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+
+      - name: Clone Backend
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
+
+      - name: Merge Project
+        shell: bash
+        run: |
+          mkdir build
+          cp -r frontend/* build/
+          cp -r backend/* build/
+
+      - name: Write pnpm workspace policy
+        shell: bash
+        run: |
+          cat > build/pnpm-workspace.yaml <<'EOF'
+          onlyBuiltDependencies:
+            - esbuild
+            - vue-demi
+          EOF
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10.12.4
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: build/pnpm-lock.yaml
+
+      - name: Show versions
+        shell: bash
+        run: |
+          node -v
+          pnpm -v
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          cd build
+          pnpm install --frozen-lockfile
+
+      - name: Type Check Frontend
+        shell: bash
+        run: |
+          cd build
+          pnpm vue-tsc --noEmit
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Debug Cargo profile
+        shell: bash
+        run: |
+          echo "===== build/src-tauri/Cargo.toml ====="
+          cat build/src-tauri/Cargo.toml
+
+      - name: Build Tauri App
+        shell: bash
+        env:
+          CARGO_BUILD_JOBS: 1
+          RUSTFLAGS: -C debuginfo=0
+        run: |
+          cd build
+          pnpm tauri build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: legado-windows-latest
+          path: |
+            build/src-tauri/target/release/
+            build/src-tauri/target/release/bundle/
+
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Git Auth
+        shell: bash
+        run: |
+          git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone Frontend
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+
+      - name: Clone Backend
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
+
+      - name: Merge Project
+        shell: bash
+        run: |
+          mkdir build
+          cp -r frontend/* build/
+          cp -r backend/* build/
+
+      - name: Write pnpm workspace policy
+        shell: bash
+        run: |
+          cat > build/pnpm-workspace.yaml <<'EOF'
+          onlyBuiltDependencies:
+            - esbuild
+            - vue-demi
+          EOF
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10.12.4
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: build/pnpm-lock.yaml
+
+      - name: Show versions
+        shell: bash
+        run: |
+          node -v
+          pnpm -v
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          cd build
+          pnpm install --frozen-lockfile
+
+      - name: Type Check Frontend
+        shell: bash
+        run: |
+          cd build
+          pnpm vue-tsc --noEmit
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Tauri App
         shell: bash
         env:
           NODE_OPTIONS: --max-old-space-size=6144
@@ -109,37 +297,153 @@ jobs:
           cd build
           pnpm tauri build
 
-      - name: Build Tauri App (Non-macOS)
-        if: matrix.os != 'macos-latest'
-        shell: bash
-        env:
-          CARGO_BUILD_JOBS: 1
-          RUSTFLAGS: -C debuginfo=0
-        run: |
-          cd build
-          pnpm tauri build
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Build Tauri App
-        shell: bash
-        run: |
-          cd build
-          pnpm tauri build
-        env:
-          CARGO_BUILD_JOBS: ${{ matrix.os == 'windows-latest' && '1' || '2' }}
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: legado-${{ matrix.os }}
+          name: legado-macos-latest
           path: |
             build/src-tauri/target/release/
             build/src-tauri/target/release/bundle/
 
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Git Auth
+        shell: bash
+        run: |
+          git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone Frontend
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+
+      - name: Clone Backend
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
+
+      - name: Merge Project
+        shell: bash
+        run: |
+          mkdir build
+          cp -r frontend/* build/
+          cp -r backend/* build/
+
+      - name: Write pnpm workspace policy
+        shell: bash
+        run: |
+          cat > build/pnpm-workspace.yaml <<'EOF'
+          onlyBuiltDependencies:
+            - esbuild
+            - vue-demi
+          EOF
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10.12.4
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: build/pnpm-lock.yaml
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: >-
+            platform-tools
+            build-tools;35.0.0
+            platforms;android-35
+            ndk;27.0.12077973
+            cmdline-tools;latest
+
+      - name: Show versions
+        shell: bash
+        run: |
+          node -v
+          pnpm -v
+          java -version
+          sdkmanager --list | head -n 40 || true
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          cd build
+          pnpm install --frozen-lockfile
+
+      - name: Type Check Frontend
+        shell: bash
+        run: |
+          cd build
+          pnpm vue-tsc --noEmit
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Add Rust Android targets
+        shell: bash
+        run: |
+          rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+
+      - name: Set Android env
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          NDK_VERSION=$(ls -1 /usr/local/lib/android/sdk/ndk | sort -V | tail -n 1)
+          echo "NDK_HOME=/usr/local/lib/android/sdk/ndk/$NDK_VERSION" >> $GITHUB_ENV
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+
+      - name: Debug Android env
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          echo "NDK_HOME=$NDK_HOME"
+          test -d "$ANDROID_HOME"
+          test -d "$NDK_HOME"
+
+      - name: Build Android APK
+        shell: bash
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+          CARGO_BUILD_JOBS: 1
+          RUSTFLAGS: -C debuginfo=0
+        run: |
+          cd build
+          pnpm tauri android build --apk --target aarch64
+
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: legado-android
+          path: |
+            build/src-tauri/gen/android/app/build/outputs/apk/**/*
+            build/src-tauri/gen/android/app/build/outputs/bundle/**/*
+
   release:
-    needs: build
+    name: Release
+    needs:
+      - build-linux
+      - build-windows
+      - build-macos
+      - build-android
     runs-on: ubuntu-latest
 
     steps:
