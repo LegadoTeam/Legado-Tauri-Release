@@ -37,13 +37,7 @@ jobs:
         run: |
           mkdir build
           cp -r frontend/* build/
-
-          # 如果 backend 是 tauri 核心
-          if [ -d "backend/src-tauri" ]; then
-            cp -r backend/src-tauri build/
-          else
-            cp -r backend/* build/
-          fi
+          cp -r backend/* build/
 
       - name: Setup Node
         uses: actions/setup-node@main
