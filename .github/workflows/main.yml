@@ -115,9 +115,8 @@ jobs:
         with:
           name: legado-ubuntu-latest
           path: |
-            build/src-tauri/target/release/
             build/src-tauri/target/release/bundle/
-
+            #build/src-tauri/target/release/
   build-windows:
     name: Build Windows
     runs-on: windows-latest
