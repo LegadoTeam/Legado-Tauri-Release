@@ -202,6 +202,10 @@ jobs:
         env:
           CARGO_BUILD_JOBS: 1
           RUSTFLAGS: -C debuginfo=0
+          CARGO_PROFILE_RELEASE_OPT_LEVEL: 0
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+          CARGO_PROFILE_RELEASE_LTO: "false"
+          CARGO_PROFILE_RELEASE_INCREMENTAL: "false"
         run: |
           cd build
           pnpm tauri build
@@ -211,8 +215,8 @@ jobs:
         with:
           name: legado-windows-latest
           path: |
-            build/src-tauri/target/release/
             build/src-tauri/target/release/bundle/
+            #build/src-tauri/target/release/
 
   build-macos:
     name: Build macOS
@@ -302,8 +306,8 @@ jobs:
         with:
           name: legado-macos-latest
           path: |
-            build/src-tauri/target/release/
             build/src-tauri/target/release/bundle/
+            #build/src-tauri/target/release/
 
   build-android:
     name: Build Android
