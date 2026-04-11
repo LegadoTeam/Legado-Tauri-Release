@@ -20,22 +20,16 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
 
-      - name: Clone Frontend
+      - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
 
-      - name: Clone Backend
-        shell: bash
-        run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
-
-      - name: Merge Project
+      - name: Move Project
         shell: bash
         run: |
           mkdir build
-          cp -r frontend/* build/
-          cp -r backend/* build/
+          cp -r Source/* build/
 
       - name: Write pnpm workspace policy
         shell: bash
@@ -131,22 +125,16 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
 
-      - name: Clone Frontend
+      - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
 
-      - name: Clone Backend
-        shell: bash
-        run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
-
-      - name: Merge Project
+      - name: Move Project
         shell: bash
         run: |
           mkdir build
-          cp -r frontend/* build/
-          cp -r backend/* build/
+          cp -r Source/* build/
 
       - name: Write pnpm workspace policy
         shell: bash
@@ -231,22 +219,16 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
 
-      - name: Clone Frontend
+      - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
 
-      - name: Clone Backend
-        shell: bash
-        run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
-
-      - name: Merge Project
+      - name: Move Project
         shell: bash
         run: |
           mkdir build
-          cp -r frontend/* build/
-          cp -r backend/* build/
+          cp -r Source/* build/
 
       - name: Write pnpm workspace policy
         shell: bash
@@ -321,22 +303,16 @@ jobs:
         run: |
           git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
 
-      - name: Clone Frontend
+      - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Frontend.git frontend
+          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
 
-      - name: Clone Backend
-        shell: bash
-        run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri-Backend.git backend
-
-      - name: Merge Project
+      - name: Move Project
         shell: bash
         run: |
           mkdir build
-          cp -r frontend/* build/
-          cp -r backend/* build/
+          cp -r Source/* build/
 
       - name: Write pnpm workspace policy
         shell: bash
