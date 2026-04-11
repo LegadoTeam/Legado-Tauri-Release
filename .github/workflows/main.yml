@@ -115,8 +115,9 @@ jobs:
         with:
           name: legado-ubuntu-latest
           path: |
-            build/src-tauri/target/release/bundle/
-            #build/src-tauri/target/release/
+            build/src-tauri/target/release/bundle/appimage/*.AppImage
+            build/src-tauri/target/release/bundle/deb/*.deb
+            build/src-tauri/target/release/bundle/rpm/*.rpm
   build-windows:
     name: Build Windows
     runs-on: windows-latest
@@ -214,8 +215,8 @@ jobs:
         with:
           name: legado-windows-latest
           path: |
-            build/src-tauri/target/release/bundle/
-            #build/src-tauri/target/release/
+            build/src-tauri/target/release/bundle/nsis/*.exe
+            build/src-tauri/target/release/bundle/msi/*.msi
 
   build-macos:
     name: Build macOS
@@ -305,8 +306,7 @@ jobs:
         with:
           name: legado-macos-latest
           path: |
-            build/src-tauri/target/release/bundle/
-            #build/src-tauri/target/release/
+            build/src-tauri/target/release/bundle/dmg/*.dmg
 
   build-android:
     name: Build Android
@@ -437,8 +437,7 @@ jobs:
         with:
           name: legado-android
           path: |
-            build/src-tauri/gen/android/app/build/outputs/apk/**/*
-            build/src-tauri/gen/android/app/build/outputs/bundle/**/*
+            build/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
 
   release:
     name: Release
@@ -451,12 +450,44 @@ jobs:
 
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@main
+
+      - name: Generate release tag
+        id: meta
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            TAG_NAME="${GITHUB_REF_NAME}"
+          else
+            TAG_NAME="Beta-3.26.$(TZ='Asia/Shanghai' date +'%m%d%H%M')"
+          fi
+
+          echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
+          echo "release_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Create Git tag when no tag input
+        if: github.ref_type != 'tag'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.meta.outputs.tag_name }}"
+          git push origin "${{ steps.meta.outputs.tag_name }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@master
         with:
+          tag_name: ${{ steps.meta.outputs.tag_name }}
+          name: ${{ steps.meta.outputs.release_name }}
           files: |
-            **/*
+            **/*.apk
+            **/*.AppImage
+            **/*.deb
+            **/*.rpm
+            **/*.dmg
+            **/*.exe
+            **/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
