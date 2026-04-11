@@ -41,7 +41,7 @@ jobs:
           EOF
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@master
         with:
           version: 10.12.4
           run_install: false
@@ -146,7 +146,7 @@ jobs:
           EOF
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@master
         with:
           version: 10.12.4
           run_install: false
@@ -240,7 +240,7 @@ jobs:
           EOF
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@master
         with:
           version: 10.12.4
           run_install: false
@@ -289,7 +289,6 @@ jobs:
           name: legado-macos-latest
           path: |
             build/src-tauri/target/release/bundle/dmg/*.dmg
-
   build-android:
     name: Build Android
     runs-on: ubuntu-latest
@@ -319,6 +318,8 @@ jobs:
         run: |
           cat > build/pnpm-workspace.yaml <<'EOF'
           onlyBuiltDependencies:
+            - unplugin-auto-import
+            - unplugin-vue-components
             - esbuild
             - vue-demi
           EOF
@@ -343,7 +344,7 @@ jobs:
           java-version: 17
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
+        uses: android-actions/setup-android@main
         with:
           packages: >-
             platform-tools
@@ -364,7 +365,7 @@ jobs:
         shell: bash
         run: |
           cd build
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
 
       # - name: Type Check Frontend
       #   shell: bash
@@ -388,6 +389,7 @@ jobs:
           NDK_VERSION=$(ls -1 /usr/local/lib/android/sdk/ndk | sort -V | tail -n 1)
           echo "NDK_HOME=/usr/local/lib/android/sdk/ndk/$NDK_VERSION" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "BUILD_TOOLS_DIR=/usr/local/lib/android/sdk/build-tools/35.0.0" >> $GITHUB_ENV
 
       - name: Debug Android env
         shell: bash
@@ -395,65 +397,10 @@ jobs:
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           echo "NDK_HOME=$NDK_HOME"
+          echo "BUILD_TOOLS_DIR=$BUILD_TOOLS_DIR"
           test -d "$ANDROID_HOME"
           test -d "$NDK_HOME"
-
-      - name: Init Android project
-        shell: bash
-        run: |
-          cd build
-          pnpm tauri android init
-
-      - name: Prepare Android signing
-        shell: bash
-        run: |
-          cd build/src-tauri/gen/android
-          echo "APK_RELEASE_KEY_ALIAS=${{ secrets.APK_RELEASE_KEY_ALIAS }}" >> gradle.properties
-          echo "RELEASE_KEY_PASSWORD=${{ secrets.APK_RELEASE_KEY_PASSWORD }}" >> gradle.properties
-          echo "RELEASE_STORE_PASSWORD=${{ secrets.APK_RELEASE_STORE_PASSWORD }}" >> gradle.properties
-          echo "${{ secrets.APK_RELEASE_KEY_STORE }}" | base64 --decode > key.jks
-
-      - name: Patch Android signing config
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          p = Path("build/src-tauri/gen/android/app/build.gradle.kts")
-          text = p.read_text(encoding="utf-8")
-
-          signing_block = '''
-              signingConfigs {
-                  create("release") {
-                      val storeFilePath = rootProject.file("key.jks")
-                      if (storeFilePath.exists()) {
-                          storeFile = storeFilePath
-                          storePassword = project.findProperty("RELEASE_STORE_PASSWORD") as String?
-                          keyAlias = project.findProperty("APK_RELEASE_KEY_ALIAS") as String?
-                          keyPassword = project.findProperty("RELEASE_KEY_PASSWORD") as String?
-                      }
-                  }
-              }
-
-          '''
-
-          if 'signingConfigs {' not in text:
-              text = text.replace('    buildTypes {\n', signing_block + '    buildTypes {\n', 1)
-
-          old = '''        getByName("release") {
-                  isMinifyEnabled = true
-          '''
-          new = '''        getByName("release") {
-                  isMinifyEnabled = true
-                  signingConfig = signingConfigs.getByName("release")
-          '''
-
-          if 'signingConfig = signingConfigs.getByName("release")' not in text:
-              text = text.replace(old, new, 1)
-
-          p.write_text(text, encoding="utf-8")
-          print("Patched:", p)
-          PY
+          test -f "$BUILD_TOOLS_DIR/apksigner"
 
       - name: Build Android APK
         shell: bash
@@ -464,6 +411,39 @@ jobs:
         run: |
           cd build
           pnpm tauri android build --apk --target aarch64
+
+      - name: Decode Android keystore
+        shell: bash
+        run: |
+          echo "${{ secrets.APK_RELEASE_KEY_STORE }}" | base64 --decode > /tmp/key.jks
+
+      - name: Sign APK
+        shell: bash
+        run: |
+          set -e
+
+          find build/src-tauri/gen/android/app/build/outputs/apk -type f -name "*.apk" ! -name "*-signed.apk" -print0 | while IFS= read -r -d '' apk; do
+            signed_apk="${apk%.apk}-signed.apk"
+
+            "$BUILD_TOOLS_DIR/apksigner" sign \
+              --ks /tmp/key.jks \
+              --ks-key-alias "${{ secrets.APK_RELEASE_KEY_ALIAS }}" \
+              --ks-pass pass:"${{ secrets.APK_RELEASE_STORE_PASSWORD }}" \
+              --key-pass pass:"${{ secrets.APK_RELEASE_KEY_PASSWORD }}" \
+              --out "$signed_apk" \
+              "$apk"
+
+            mv -f "$signed_apk" "$apk"
+          done
+
+      - name: Verify APK signature
+        shell: bash
+        run: |
+          set -e
+
+          find build/src-tauri/gen/android/app/build/outputs/apk -type f -name "*.apk" -print0 | while IFS= read -r -d '' apk; do
+            "$BUILD_TOOLS_DIR/apksigner" verify --verbose "$apk"
+          done
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@main
