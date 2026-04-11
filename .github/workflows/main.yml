@@ -462,6 +462,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TOKEN_MGZ }}
+
       - name: Download Artifacts
         uses: actions/download-artifact@main
 
@@ -484,10 +490,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag "${{ steps.meta.outputs.tag_name }}"
-          git push origin "${{ steps.meta.outputs.tag_name }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
+
+          if git rev-parse "${{ steps.meta.outputs.tag_name }}" >/dev/null 2>&1; then
+            echo "Tag already exists: ${{ steps.meta.outputs.tag_name }}"
+          else
+            git tag "${{ steps.meta.outputs.tag_name }}"
+            git push origin "${{ steps.meta.outputs.tag_name }}"
+          fi
 
       - name: Create Release
         uses: softprops/action-gh-release@master
@@ -502,5 +511,23 @@ jobs:
             **/*.dmg
             **/*.exe
             **/*.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
+
+      - name: Delete workflow runs
+        uses: mgz0227/delete-workflow-runs@main
+        continue-on-error: true
+        with:
+          token: ${{ secrets.TOKEN_MGZ }}
+          retain_days: 100
+          keep_minimum_runs: 0
+
+      - name: Remove old Releases
+        uses: mgz0227/delete-older-releases@master
+        continue-on-error: true
+        if: env.UPLOAD_FIRMWARE_FOR_RELEASE == 'true' && !cancelled()
+        with:
+          keep_latest: 15
+          delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_MGZ }}
