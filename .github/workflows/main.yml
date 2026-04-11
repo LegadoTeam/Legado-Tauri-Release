@@ -324,7 +324,7 @@ jobs:
           EOF
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@master
         with:
           version: 10.12.4
           run_install: false
@@ -366,11 +366,11 @@ jobs:
           cd build
           pnpm install --frozen-lockfile
 
-    #  - name: Type Check Frontend
-     #   shell: bash
-      #  run: |
-       #   cd build
-        #  pnpm vue-tsc --noEmit
+      # - name: Type Check Frontend
+      #   shell: bash
+      #   run: |
+      #     cd build
+      #     pnpm vue-tsc --noEmit
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -397,6 +397,63 @@ jobs:
           echo "NDK_HOME=$NDK_HOME"
           test -d "$ANDROID_HOME"
           test -d "$NDK_HOME"
+
+      - name: Init Android project
+        shell: bash
+        run: |
+          cd build
+          pnpm tauri android init
+
+      - name: Prepare Android signing
+        shell: bash
+        run: |
+          cd build/src-tauri/gen/android
+          echo "APK_RELEASE_KEY_ALIAS=${{ secrets.APK_RELEASE_KEY_ALIAS }}" >> gradle.properties
+          echo "RELEASE_KEY_PASSWORD=${{ secrets.APK_RELEASE_KEY_PASSWORD }}" >> gradle.properties
+          echo "RELEASE_STORE_PASSWORD=${{ secrets.APK_RELEASE_STORE_PASSWORD }}" >> gradle.properties
+          echo "${{ secrets.APK_RELEASE_KEY_STORE }}" | base64 --decode > key.jks
+
+      - name: Patch Android signing config
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("build/src-tauri/gen/android/app/build.gradle.kts")
+          text = p.read_text(encoding="utf-8")
+
+          signing_block = '''
+              signingConfigs {
+                  create("release") {
+                      val storeFilePath = rootProject.file("key.jks")
+                      if (storeFilePath.exists()) {
+                          storeFile = storeFilePath
+                          storePassword = project.findProperty("RELEASE_STORE_PASSWORD") as String?
+                          keyAlias = project.findProperty("APK_RELEASE_KEY_ALIAS") as String?
+                          keyPassword = project.findProperty("RELEASE_KEY_PASSWORD") as String?
+                      }
+                  }
+              }
+
+          '''
+
+          if 'signingConfigs {' not in text:
+              text = text.replace('    buildTypes {\n', signing_block + '    buildTypes {\n', 1)
+
+          old = '''        getByName("release") {
+                  isMinifyEnabled = true
+          '''
+          new = '''        getByName("release") {
+                  isMinifyEnabled = true
+                  signingConfig = signingConfigs.getByName("release")
+          '''
+
+          if 'signingConfig = signingConfigs.getByName("release")' not in text:
+              text = text.replace(old, new, 1)
+
+          p.write_text(text, encoding="utf-8")
+          print("Patched:", p)
+          PY
 
       - name: Build Android APK
         shell: bash
