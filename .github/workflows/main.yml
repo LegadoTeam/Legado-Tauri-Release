@@ -42,8 +42,8 @@ jobs:
         run: |
           cat > build/pnpm-workspace.yaml <<'EOF'
           onlyBuiltDependencies:
-            -unplugin-auto-import
-            -unplugin-vue-components
+            - unplugin-auto-import
+            - unplugin-vue-components
             - esbuild
             - vue-demi
           EOF
@@ -155,8 +155,8 @@ jobs:
         run: |
           cat > build/pnpm-workspace.yaml <<'EOF'
           onlyBuiltDependencies:
-            -unplugin-auto-import
-            -unplugin-vue-components
+            - unplugin-auto-import
+            - unplugin-vue-components
             - esbuild
             - vue-demi
           EOF
@@ -257,8 +257,8 @@ jobs:
         run: |
           cat > build/pnpm-workspace.yaml <<'EOF'
           onlyBuiltDependencies:
-            -unplugin-auto-import
-            -unplugin-vue-components
+            - unplugin-auto-import
+            - unplugin-vue-components
             - esbuild
             - vue-demi
           EOF
@@ -349,8 +349,8 @@ jobs:
         run: |
           cat > build/pnpm-workspace.yaml <<'EOF'
           onlyBuiltDependencies:
-            -unplugin-auto-import
-            -unplugin-vue-components
+            - unplugin-auto-import
+            - unplugin-vue-components
             - esbuild
             - vue-demi
           EOF
