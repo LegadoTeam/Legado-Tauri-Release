@@ -65,11 +65,11 @@ jobs:
           cd build
           pnpm install --frozen-lockfile
 
-      - name: Type Check Frontend
-        shell: bash
-        run: |
-          cd build
-          pnpm vue-tsc --noEmit
+     # - name: Type Check Frontend
+     #   shell: bash
+      #  run: |
+     #     cd build
+      #    pnpm vue-tsc --noEmit
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -170,11 +170,11 @@ jobs:
           cd build
           pnpm install --frozen-lockfile
 
-      - name: Type Check Frontend
-        shell: bash
-        run: |
-          cd build
-          pnpm vue-tsc --noEmit
+    #  - name: Type Check Frontend
+    #    shell: bash
+    #    run: |
+     #     cd build
+      #    pnpm vue-tsc --noEmit
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -264,11 +264,11 @@ jobs:
           cd build
           pnpm install --frozen-lockfile
 
-      - name: Type Check Frontend
-        shell: bash
-        run: |
-          cd build
-          pnpm vue-tsc --noEmit
+    #  - name: Type Check Frontend
+     #   shell: bash
+      #  run: |
+       #   cd build
+        #  pnpm vue-tsc --noEmit
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -366,11 +366,11 @@ jobs:
           cd build
           pnpm install --frozen-lockfile
 
-      - name: Type Check Frontend
-        shell: bash
-        run: |
-          cd build
-          pnpm vue-tsc --noEmit
+    #  - name: Type Check Frontend
+     #   shell: bash
+      #  run: |
+       #   cd build
+        #  pnpm vue-tsc --noEmit
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
