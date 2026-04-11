@@ -49,7 +49,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@main
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           cache-dependency-path: build/pnpm-lock.yaml
 
@@ -154,7 +154,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@main
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           cache-dependency-path: build/pnpm-lock.yaml
 
@@ -248,7 +248,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@main
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           cache-dependency-path: build/pnpm-lock.yaml
 
@@ -333,7 +333,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@main
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           cache-dependency-path: build/pnpm-lock.yaml
 
