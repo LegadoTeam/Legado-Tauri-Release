@@ -402,6 +402,22 @@ jobs:
           test -d "$NDK_HOME"
           test -f "$BUILD_TOOLS_DIR/apksigner"
 
+      - name: Decode Android keystore
+        shell: bash
+        run: |
+          echo "${{ secrets.APK_RELEASE_KEY_STORE }}" | base64 --decode > /tmp/key.jks
+          test -s /tmp/key.jks
+
+      - name: Write key.properties
+        shell: bash
+        run: |
+          cat > build/src-tauri/gen/android/key.properties <<EOF
+          keyAlias=${{ secrets.APK_RELEASE_KEY_ALIAS }}
+          keyPassword=${{ secrets.APK_RELEASE_KEY_PASSWORD }}
+          storeFile=/tmp/key.jks
+          storePassword=${{ secrets.APK_RELEASE_STORE_PASSWORD }}
+          EOF
+
       - name: Build Android APK
         shell: bash
         env:
@@ -417,31 +433,6 @@ jobs:
         run: |
           find build/src-tauri/gen/android/app/build/outputs/apk -type f -name "*.apk"
           test -n "$(find build/src-tauri/gen/android/app/build/outputs/apk -type f -name '*.apk' -print -quit)"
-
-      - name: Decode Android keystore
-        shell: bash
-        run: |
-          echo "${{ secrets.APK_RELEASE_KEY_STORE }}" | base64 --decode > /tmp/key.jks
-          test -s /tmp/key.jks
-
-      - name: Sign APK
-        shell: bash
-        run: |
-          set -e
-
-          find build/src-tauri/gen/android/app/build/outputs/apk -type f -name "*.apk" ! -name "*-signed.apk" -print0 | while IFS= read -r -d '' apk; do
-            signed_apk="${apk%.apk}-signed.apk"
-
-            "$BUILD_TOOLS_DIR/apksigner" sign \
-              --ks /tmp/key.jks \
-              --ks-key-alias "${{ secrets.APK_RELEASE_KEY_ALIAS }}" \
-              --ks-pass pass:"${{ secrets.APK_RELEASE_STORE_PASSWORD }}" \
-              --key-pass pass:"${{ secrets.APK_RELEASE_KEY_PASSWORD }}" \
-              --out "$signed_apk" \
-              "$apk"
-
-            mv -f "$signed_apk" "$apk"
-          done
 
       - name: Verify APK signature
         shell: bash
