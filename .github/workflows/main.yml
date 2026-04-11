@@ -412,10 +412,17 @@ jobs:
           cd build
           pnpm tauri android build --apk --target aarch64
 
+      - name: Check APK output
+        shell: bash
+        run: |
+          find build/src-tauri/gen/android/app/build/outputs/apk -type f -name "*.apk"
+          test -n "$(find build/src-tauri/gen/android/app/build/outputs/apk -type f -name '*.apk' -print -quit)"
+
       - name: Decode Android keystore
         shell: bash
         run: |
           echo "${{ secrets.APK_RELEASE_KEY_STORE }}" | base64 --decode > /tmp/key.jks
+          test -s /tmp/key.jks
 
       - name: Sign APK
         shell: bash
@@ -446,7 +453,7 @@ jobs:
           done
 
       - name: Upload Android Artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: legado-android
           path: |
