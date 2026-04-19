@@ -106,6 +106,13 @@ jobs:
           cd build
           pnpm tauri build
 
+      - name: Upload Dist Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Legado-dist
+          path: |
+            build/dist/**
+
       - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
@@ -510,6 +517,7 @@ jobs:
           tag_name: ${{ steps.meta.outputs.tag_name }}
           name: ${{ steps.meta.outputs.release_name }}
           files: |
+            **/dist/**
             **/*.apk
             **/*.AppImage
             **/*.deb
