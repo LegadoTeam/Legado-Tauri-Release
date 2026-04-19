@@ -534,7 +534,6 @@ jobs:
           name: ${{ steps.meta.outputs.release_name }}
           files: |
             **/Legado-Linux-with-dist.zip
-            **/dist/**
             **/*.apk
             **/*.AppImage
             **/*.deb
