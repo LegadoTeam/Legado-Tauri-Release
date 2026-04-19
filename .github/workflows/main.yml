@@ -30,6 +30,8 @@ jobs:
         run: |
           mkdir build
           cp -r Source/* build/
+          rm build/pnpm-lock.yaml
+          cp -r pnpm-lock.yaml build/
 
       - name: Write pnpm workspace policy
         shell: bash
@@ -135,6 +137,8 @@ jobs:
         run: |
           mkdir build
           cp -r Source/* build/
+          rm build/pnpm-lock.yaml
+          cp -r pnpm-lock.yaml build/
 
       - name: Write pnpm workspace policy
         shell: bash
@@ -229,6 +233,8 @@ jobs:
         run: |
           mkdir build
           cp -r Source/* build/
+          rm build/pnpm-lock.yaml
+          cp -r pnpm-lock.yaml build/
 
       - name: Write pnpm workspace policy
         shell: bash
@@ -312,6 +318,8 @@ jobs:
         run: |
           mkdir build
           cp -r Source/* build/
+          rm build/pnpm-lock.yaml
+          cp -r pnpm-lock.yaml build/
 
       - name: Write pnpm workspace policy
         shell: bash
