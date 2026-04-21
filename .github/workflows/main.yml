@@ -481,6 +481,129 @@ jobs:
           path: |
             build/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
 
+  build-Harmony:
+    name: Build Harmony
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Setup Git Auth
+        shell: bash
+        run: |
+          git config --global url."https://${{ secrets.TOKEN_MGZ }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone Source
+        shell: bash
+        run: |
+          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
+
+      - name: Move Project
+        shell: bash
+        run: |
+          mkdir build
+          cp -r Source/* build/
+          rm build/pnpm-lock.yaml
+          cp -r pnpm-lock.yaml build/
+
+      - name: Write pnpm workspace policy
+        shell: bash
+        run: |
+          cat > build/pnpm-workspace.yaml <<'EOF'
+          onlyBuiltDependencies:
+            - esbuild
+            - vue-demi
+          EOF
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@master
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@main
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: build/pnpm-lock.yaml
+
+      - name: Show versions
+        shell: bash
+        run: |
+          node -v
+          pnpm -v
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          cd build
+          pnpm install --frozen-lockfile
+
+     # - name: Type Check Frontend
+     #   shell: bash
+      #  run: |
+     #     cd build
+      #    pnpm vue-tsc --noEmit
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux dependencies
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            pkg-config \
+            libglib2.0-dev \
+            libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+          pkg-config --modversion glib-2.0
+          pkg-config --cflags glib-2.0
+          pkg-config --libs glib-2.0
+
+      - name: Build Tauri App
+        shell: bash
+        env:
+          CARGO_BUILD_JOBS: 1
+          RUSTFLAGS: -C debuginfo=0
+        run: |
+          cd build
+          # 在主项目根目录
+          pnpm build:harmony
+
+      - name: Pack binary with dist
+        shell: bash
+        run: |
+          mkdir -p package/legado_Harmony
+          cp build/src-tauri/target/release/legado_tauri package/legado_Harmony/
+          cp -r build/dist package/legado_Harmony/dist
+          cd package
+          zip -r Legado-Harmony-with-dist.zip legado_Harmony
+
+      - name: Upload Binary With Dist Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Legado-Linux-with-dist
+          path: package/Legado-Harmony-with-dist.zip
+          
+
+      - name: Upload Dist Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Legado-dist
+          path: |
+            build/dist/**
+
   release:
     name: Release
     needs:
@@ -488,6 +611,7 @@ jobs:
       - build-windows
       - build-macos
       - build-android
+      - build-Harmony
     runs-on: ubuntu-latest
 
     steps:
@@ -534,6 +658,7 @@ jobs:
           name: ${{ steps.meta.outputs.release_name }}
           files: |
             **/Legado-Linux-with-dist.zip
+            **/Legado-Harmony-with-dist.zip
             **/*.apk
             **/*.AppImage
             **/*.deb
