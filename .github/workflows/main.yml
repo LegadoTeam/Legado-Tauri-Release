@@ -585,7 +585,6 @@ jobs:
         shell: bash
         run: |
           mkdir -p package/legado_Harmony
-          cp build/src-tauri/target/release/legado_tauri package/legado_Harmony/
           cp -r build/dist package/legado_Harmony/dist
           cd package
           zip -r Legado-Harmony-with-dist.zip legado_Harmony
