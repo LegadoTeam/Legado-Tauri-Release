@@ -23,7 +23,7 @@ jobs:
       - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
+          git clone https://github.com/mgz0227/Legado-Tauri.git Source
 
       - name: Move Project
         shell: bash
@@ -153,7 +153,7 @@ jobs:
       - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
+          git clone https://github.com/mgz0227/Legado-Tauri.git Source
 
       - name: Move Project
         shell: bash
@@ -249,7 +249,7 @@ jobs:
       - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
+          git clone https://github.com/mgz0227/Legado-Tauri.git Source
 
       - name: Move Project
         shell: bash
@@ -334,7 +334,7 @@ jobs:
       - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
+          git clone https://github.com/mgz0227/Legado-Tauri.git Source
 
       - name: Move Project
         shell: bash
@@ -497,7 +497,7 @@ jobs:
       - name: Clone Source
         shell: bash
         run: |
-          git clone https://github.com/LegadoTeam/Legado-Tauri.git Source
+          git clone https://github.com/mgz0227/Legado-Tauri.git Source
 
       - name: Move Project
         shell: bash
